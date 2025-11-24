@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHIIP-SEEK Парсер | Modern</title>
+    <title>CHIIP-SEEK Парсер | CORS Fixed</title>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -143,6 +143,24 @@
             color: #556677;
         }
 
+        .proxy-selector {
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .proxy-selector select {
+            background: rgba(10, 10, 20, 0.8);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-green);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            width: 100%;
+        }
+
         .btn {
             background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
             color: #000;
@@ -177,10 +195,6 @@
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 25px rgba(0, 255, 136, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(0);
         }
 
         .result-container {
@@ -225,6 +239,29 @@
             color: var(--neon-blue);
         }
 
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            color: #8899aa;
+            font-size: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chip-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid var(--neon-green);
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: var(--neon-green);
+            animation: pulse 2s infinite;
+        }
+
         .pulse {
             animation: pulse 2s infinite;
         }
@@ -245,27 +282,6 @@
             100% { transform: translateY(0px); }
         }
 
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            color: #8899aa;
-            font-size: 12px;
-        }
-
-        .chip-badge {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid var(--neon-green);
-            padding: 10px 15px;
-            border-radius: 10px;
-            font-size: 12px;
-            color: var(--neon-green);
-            animation: pulse 2s infinite;
-        }
-
         /* Стили для скроллбара */
         .result::-webkit-scrollbar {
             width: 8px;
@@ -281,16 +297,13 @@
             border-radius: 4px;
         }
 
-        /* Адаптивность */
         @media (max-width: 768px) {
             .title {
                 font-size: 2.5rem;
             }
-            
             .card {
                 padding: 25px;
             }
-            
             .container {
                 padding: 20px 15px;
             }
@@ -303,7 +316,7 @@
     <div class="container">
         <div class="header">
             <h1 class="title floating">CHIIP-SEEK PARSER</h1>
-            <p class="subtitle">Modern Web Content Extraction Interface</p>
+            <p class="subtitle">CORS-Bypass Content Extraction</p>
         </div>
 
         <div class="card">
@@ -313,6 +326,17 @@
                        autocomplete="off">
             </div>
             
+            <div class="proxy-selector">
+                <label for="proxySelect">Select Proxy Server:</label>
+                <select id="proxySelect">
+                    <option value="corsanywhere">CORS Anywhere (cors-anywhere.herokuapp.com)</option>
+                    <option value="allorigins">AllOrigins (api.allorigins.win)</option>
+                    <option value="corsproxy">CORS Proxy (corsproxy.io)</option>
+                    <option value="whatever">Whatever Origin (whateverorigin.org)</option>
+                    <option value="direct">Direct (No Proxy - for CORS enabled sites)</option>
+                </select>
+            </div>
+            
             <button class="btn" onclick="parseContent()">
                 <span class="pulse">⚡</span> EXTRACT CONTENT
             </button>
@@ -320,6 +344,7 @@
             <div class="stats">
                 <div id="charCount">Characters: 0</div>
                 <div id="status">Status: Ready</div>
+                <div id="proxyStatus">Proxy: Not used</div>
             </div>
         </div>
 
@@ -337,13 +362,22 @@
         const resultDiv = document.getElementById('result');
         const charCount = document.getElementById('charCount');
         const status = document.getElementById('status');
+        const proxyStatus = document.getElementById('proxyStatus');
+        const proxySelect = document.getElementById('proxySelect');
 
-        // Анимация ввода
+        // Список прокси серверов
+        const proxies = {
+            corsanywhere: (url) => `https://cors-anywhere.herokuapp.com/${url}`,
+            allorigins: (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+            corsproxy: (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+            whatever: (url) => `https://whateverorigin.org/get?url=${encodeURIComponent(url)}`,
+            direct: (url) => url
+        };
+
         urlInput.addEventListener('input', function() {
             charCount.textContent = `Characters: ${this.value.length}`;
         });
 
-        // Обработка Enter
         urlInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 parseContent();
@@ -352,67 +386,108 @@
 
         async function parseContent() {
             const url = urlInput.value.trim();
+            const selectedProxy = proxySelect.value;
 
             if (!url) {
                 showResult('⚠️ Please enter a URL', 'error');
                 return;
             }
 
-            showResult('🔄 Scanning target...\nInitializing CHIIP-SEEK protocols...', 'loading');
+            showResult('🔄 Initializing CHIIP-SEEK protocols...\nBypassing CORS restrictions...', 'loading');
             status.textContent = 'Status: Processing';
+            proxyStatus.textContent = `Proxy: ${selectedProxy}`;
 
             try {
-                // Имитация загрузки для анимации
-                await new Promise(resolve => setTimeout(resolve, 1000));
-
-                const proxyUrl = 'https://api.allorigins.win/raw?url=';
-                const response = await fetch(proxyUrl + encodeURIComponent(url));
+                const proxyUrl = proxies[selectedProxy](url);
                 
+                console.log(`Using proxy: ${selectedProxy}`);
+                console.log(`Target URL: ${proxyUrl}`);
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 секунд таймаут
+
+                const response = await fetch(proxyUrl, {
+                    signal: controller.signal,
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
+                });
+
+                clearTimeout(timeoutId);
+
                 if (!response.ok) {
-                    throw new Error(`HTTP Error: ${response.status}`);
+                    throw new Error(`HTTP Error: ${response.status} - ${response.statusText}`);
                 }
 
-                const html = await response.text();
+                let content;
                 
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+                if (selectedProxy === 'whatever') {
+                    const data = await response.json();
+                    content = data.contents;
+                } else {
+                    content = await response.text();
+                }
+
+                if (!content) {
+                    throw new Error('No content received from the server');
+                }
+
+                // Парсинг HTML или отображение сырого контента
+                let extractedText;
                 
-                // Удаляем ненужные элементы
-                const unwanted = doc.querySelectorAll('script, style, nav, header, footer, iframe');
-                unwanted.forEach(element => element.remove());
-                
-                let textContent = doc.body.textContent || '';
-                
+                try {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(content, 'text/html');
+                    
+                    // Удаляем ненужные элементы
+                    const unwanted = doc.querySelectorAll('script, style, nav, header, footer, iframe, link, meta');
+                    unwanted.forEach(element => element.remove());
+                    
+                    extractedText = doc.body.textContent || content;
+                } catch (parseError) {
+                    console.warn('HTML parsing failed, using raw content:', parseError);
+                    extractedText = content;
+                }
+
                 // Очистка текста
-                textContent = textContent
+                extractedText = extractedText
                     .replace(/\s+/g, ' ')
                     .replace(/\n\s*\n/g, '\n')
                     .trim();
 
-                if (!textContent) {
+                if (!extractedText) {
                     throw new Error('No extractable content found');
                 }
 
-                // Ограничение длины с индикацией
+                // Ограничение длины
                 const maxLength = 15000;
-                const isTruncated = textContent.length > maxLength;
-                const displayContent = textContent.substring(0, maxLength);
+                const isTruncated = extractedText.length > maxLength;
+                const displayContent = extractedText.substring(0, maxLength);
                 
                 let resultText = `✅ CONTENT EXTRACTED SUCCESSFULLY\n`;
                 resultText += `📊 Source: ${url}\n`;
-                resultText += `📏 Length: ${textContent.length} characters\n`;
+                resultText += `🔧 Proxy: ${selectedProxy}\n`;
+                resultText += `📏 Length: ${extractedText.length} characters\n`;
                 resultText += `🕒 Timestamp: ${new Date().toLocaleString()}\n\n`;
                 resultText += `📄 CONTENT:\n${displayContent}`;
                 
                 if (isTruncated) {
-                    resultText += `\n\n... [CONTENT TRUNCATED - ${textContent.length - maxLength} CHARACTERS OMITTED] ...`;
+                    resultText += `\n\n... [CONTENT TRUNCATED - ${extractedText.length - maxLength} CHARACTERS OMITTED] ...`;
                 }
 
                 showResult(resultText, 'success');
-                status.textContent = `Status: Success (${textContent.length} chars)`;
+                status.textContent = `Status: Success (${extractedText.length} chars)`;
 
             } catch (error) {
-                showResult(`❌ EXTRACTION FAILED\n\nError: ${error.message}\n\nPlease check the URL and try again.`, 'error');
+                let errorMessage = `❌ EXTRACTION FAILED\n\n`;
+                errorMessage += `Error: ${error.message}\n`;
+                errorMessage += `Proxy: ${selectedProxy}\n\n`;
+                errorMessage += `Try:\n`;
+                errorMessage += `• Different proxy server\n`;
+                errorMessage += `• Check if URL is accessible\n`;
+                errorMessage += `• Verify the site allows access\n`;
+                
+                showResult(errorMessage, 'error');
                 status.textContent = 'Status: Error';
             }
         }
@@ -426,6 +501,10 @@
         window.addEventListener('load', function() {
             urlInput.focus();
         });
+
+        // Тестовые URL для демонстрации
+        console.log('CHIIP-SEEK Parser loaded successfully');
+        console.log('Available proxies:', Object.keys(proxies));
     </script>
 </body>
 </html>
