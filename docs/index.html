@@ -6,7 +6,6 @@
     <title>CPS Network</title>
     <link rel="icon" href="data:,">
     <style>
-        /* All your existing CSS remains the same */
         * {
             margin: 0;
             padding: 0;
@@ -1088,7 +1087,6 @@
         </div>
 
         <div class="tab-content active" id="premium-tab">
-            <!-- Premium tab content remains the same -->
             <div class="service">
                 <h2 class="service-title">🪓 99 NIGHTS HUB & DIAMONDS/DAYS FARM</h2>
                 
@@ -1181,7 +1179,6 @@
         </div>
 
         <div class="tab-content" id="discord-tab">
-            <!-- Discord tab content remains the same -->
             <div class="discord-container">
                 <div class="discord-widget">
                     <div class="discord-icon">🎮</div>
@@ -1227,7 +1224,6 @@
         </div>
 
         <div class="tab-content" id="scripts-tab">
-            <!-- Scripts tab content remains the same -->
             <div class="scripts-container">
                 <h2 class="service-title">📜 Available Scripts</h2>
                 <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">Click on any script to get options</p>
@@ -1282,20 +1278,15 @@
                 
                 <div class="status-check-notice">
                     <h3>🔍 Status Information</h3>
-                    <p>Due to CORS restrictions, we cannot fetch live status from WEAO API. Please check <strong>weao.xyz</strong> directly for the most current statuses.</p>
+                    <p>Statuses are now fetched through WEAO Proxy API to avoid CORS issues.</p>
                     <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px;">
-                        <div class="loading-status" id="loadingIndicator" style="display: none;"></div>
-                        <span id="apiStatus">Using fallback status data</span>
+                        <div class="loading-status" id="loadingIndicator"></div>
+                        <span id="apiStatus">Initializing WEAO Proxy connection...</span>
                     </div>
-                    <div id="apiErrorContainer">
-                        <div class="api-error">
-                            <h3>⚠️ API Connection Issue</h3>
-                            <p>Unable to connect to WEAO API due to CORS restrictions. Showing cached status data.</p>
-                            <a href="https://weao.xyz/" class="status-check-link" target="_blank">
-                                📊 Check live statuses on weao.xyz
-                            </a>
-                        </div>
-                    </div>
+                    <div id="apiErrorContainer" style="display: none;"></div>
+                    <a href="/" class="status-check-link" target="_blank">
+                        🔧 WEAO Proxy Dashboard
+                    </a>
                 </div>
 
                 <div class="manual-update-section">
@@ -1500,7 +1491,6 @@
         </div>
 
         <div class="tab-content" id="changelogs-tab">
-            <!-- Changelogs tab content remains the same -->
             <div class="changelogs-container">
                 <h2 class="service-title">📃 Changelogs</h2>
                 <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">CPS Network website change history</p>
@@ -1531,10 +1521,22 @@
                             <div class="changelog-date">2024</div>
                         </div>
                         <div class="changelog-description">
-                            Added manual status update feature for executors
+                            Added WEAO Proxy API integration for real-time executor statuses
                         </div>
                         <div class="changelog-details">
-                            Users can now manually update executor statuses when WEAO API is unavailable due to CORS restrictions.
+                            Integrated with WEAO Proxy API to fetch real-time executor statuses and avoid CORS restrictions.
+                        </div>
+                    </div>
+                    
+                    <div class="changelog-item">
+                        <div class="changelog-header">
+                            <div class="changelog-type added">ADDED</div>
+                        </div>
+                        <div class="changelog-description">
+                            Added manual status update feature
+                        </div>
+                        <div class="changelog-details">
+                            Users can now manually update executor statuses when API is unavailable.
                         </div>
                     </div>
                     
@@ -1671,7 +1673,30 @@
             }
         };
 
-        // ==================== STATUS MANAGEMENT ====================
+        // ==================== WEAO PROXY API INTEGRATION ====================
+        const PROXY_API_URL = '/api/status/exploits';
+
+        const executorNameMapping = {
+            "Volcano": "volcano",
+            "Velocity": "velocity", 
+            "Wave": "wave",
+            "Volt": "volt",
+            "Seliware": "seliware",
+            "Swift": "swift",
+            "Valex": "valex",
+            "Potassium": "potassium",
+            "Bunni.lol": "bunni",
+            "Sirhurt": "sirhurt",
+            "Hydrogen": "hydrogen",
+            "Macsploit": "macsploit",
+            "Codex": "codex",
+            "Cryptic": "cryptic",
+            "Cryptic-Android": "cryptic",
+            "Delta": "delta",
+            "Delta-iOS": "delta",
+            "ChocoSploit": "chocosploit"
+        };
+
         // Fallback status data
         const fallbackStatusData = {
             "Volcano": { updated: false, detected: false },
@@ -1732,6 +1757,120 @@
         function saveStatuses() {
             localStorage.setItem('cpsUpdateStatus', JSON.stringify(UpdateStatus));
             localStorage.setItem('cpsDetectStatus', JSON.stringify(DetectStatus));
+        }
+
+        // Fetch status from proxy
+        async function fetchWEAOStatus() {
+            const apiStatusElement = document.getElementById('apiStatus');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const apiErrorContainer = document.getElementById('apiErrorContainer');
+            
+            if (apiStatusElement) {
+                apiStatusElement.textContent = 'Fetching status from WEAO Proxy...';
+            }
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'inline-block';
+            }
+            if (apiErrorContainer) {
+                apiErrorContainer.style.display = 'none';
+            }
+
+            try {
+                const response = await fetch(PROXY_API_URL, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (apiStatusElement) {
+                    apiStatusElement.textContent = 'Status updated via Proxy API';
+                    setTimeout(() => {
+                        apiStatusElement.textContent = 'Auto-updates every 10 minutes';
+                    }, 3000);
+                }
+                
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+
+                return data;
+            } catch (error) {
+                console.error('Error fetching from proxy:', error);
+                
+                if (apiStatusElement) {
+                    apiStatusElement.textContent = 'Proxy connection failed. Using local data.';
+                }
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'none';
+                }
+                
+                // Show error
+                if (apiErrorContainer) {
+                    apiErrorContainer.innerHTML = `
+                        <div class="api-error">
+                            <h3>⚠️ Proxy Connection Error</h3>
+                            <p>Unable to connect to WEAO Proxy API. Showing cached status data.</p>
+                            <p><strong>Error:</strong> ${error.message}</p>
+                            <button class="status-check-link" onclick="retryProxyConnection()" style="cursor: pointer; margin-top: 10px;">
+                                🔄 Retry Connection
+                            </button>
+                        </div>
+                    `;
+                    apiErrorContainer.style.display = 'block';
+                }
+                
+                return null;
+            }
+        }
+
+        // Process proxy data
+        function processProxyData(proxyData) {
+            if (!proxyData) return;
+
+            UpdateStatus = {};
+            DetectStatus = {};
+
+            Object.entries(executorNameMapping).forEach(([ourName, apiName]) => {
+                const executorData = proxyData.find(exp => 
+                    exp.name && exp.name.toLowerCase() === apiName.toLowerCase()
+                );
+                
+                if (executorData) {
+                    UpdateStatus[ourName] = executorData.updated ? 'Updated' : 'Not Updated';
+                    DetectStatus[ourName] = executorData.detected ? 'Detected' : 'Undetected';
+                } else {
+                    UpdateStatus[ourName] = 'Unknown';
+                    DetectStatus[ourName] = 'Unknown';
+                }
+            });
+
+            saveStatuses();
+            updateStatusIndicators();
+        }
+
+        // Initialize proxy status
+        async function initializeProxyStatus() {
+            const proxyData = await fetchWEAOStatus();
+            processProxyData(proxyData);
+
+            // Periodic updates every 10 minutes
+            setInterval(async () => {
+                const proxyData = await fetchWEAOStatus();
+                processProxyData(proxyData);
+            }, 10 * 60 * 1000);
+        }
+
+        // Retry proxy connection
+        async function retryProxyConnection() {
+            const proxyData = await fetchWEAOStatus();
+            processProxyData(proxyData);
         }
 
         // Manual status update function
@@ -2005,8 +2144,9 @@
 
         // ==================== EVENT LISTENERS ====================
         document.addEventListener('DOMContentLoaded', function() {
-            // Load statuses from localStorage
+            // Load statuses and initialize proxy
             loadStatuses();
+            initializeProxyStatus();
 
             // Tab functionality
             document.querySelectorAll('.tab-button').forEach(button => {
