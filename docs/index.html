@@ -18,6 +18,95 @@
             color: #e0e0e0;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .glow-effect {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vmax;
+            height: 100vmax;
+            background: radial-gradient(circle, rgba(179, 142, 93, 0.1) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulse-glow 8s infinite alternate;
+            pointer-events: none;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                opacity: 0.3;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            100% {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+        }
+
+        .floating-particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(179, 142, 93, 0.3);
+            border-radius: 50%;
+            z-index: -1;
+            pointer-events: none;
+            animation: float-particle linear infinite;
+        }
+
+        @keyframes float-particle {
+            0% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(calc(100vw * var(--dx)));
+                opacity: 0;
+            }
+        }
+
+        .grid-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(168, 107, 107, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(168, 107, 107, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.3;
+            animation: grid-move 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes grid-move {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(25px, 25px);
+            }
         }
 
         .container {
@@ -25,6 +114,65 @@
             margin: 0 auto;
             text-align: center;
             position: relative;
+        }
+
+        .technical-issues {
+            display: none;
+            background: rgba(30, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            border: 1px solid rgba(120, 60, 60, 0.3);
+            margin-top: 100px;
+            text-align: center;
+            animation: slideIn 0.5s ease;
+        }
+
+        .technical-issues.active {
+            display: block;
+        }
+
+        .issues-icon {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            color: #a86b6b;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(179, 142, 93, 0.3);
+            }
+        }
+
+        .issues-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #b38e5d;
+            text-shadow: 0 0 20px rgba(179, 142, 93, 0.5);
+        }
+
+        .issues-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            color: #e0e0e0;
+        }
+
+        .main-content {
+            display: block;
+        }
+
+        .main-content.hidden {
+            display: none;
         }
 
         .logo {
@@ -38,6 +186,13 @@
             border: 2px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: rotate(360deg) scale(1.1);
+            box-shadow: 0 0 30px rgba(179, 142, 93, 0.5);
+            border-color: rgba(179, 142, 93, 0.5);
         }
 
         .header {
@@ -54,6 +209,18 @@
             background-clip: text;
             color: transparent;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: slideIn 0.8s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .subtitle {
@@ -61,6 +228,7 @@
             opacity: 0.8;
             margin-bottom: 30px;
             color: #b0b0b0;
+            animation: slideIn 1s ease;
         }
 
         .tabs {
@@ -82,6 +250,26 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             border: 1px solid rgba(80, 30, 30, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .tab-button:hover::after {
+            width: 300px;
+            height: 300px;
         }
 
         .tab-button.active {
@@ -212,6 +400,7 @@
             font-weight: bold;
             text-align: center;
             border-left: 3px solid rgba(179, 142, 93, 0.5);
+            animation: pulse 2s infinite;
         }
 
         .support-button {
@@ -230,6 +419,7 @@
             gap: 8px;
             transition: all 0.3s ease;
             border: 1px solid rgba(100, 40, 40, 0.3);
+            animation: pulse 2s infinite;
         }
 
         .support-button:hover {
@@ -254,6 +444,7 @@
             gap: 8px;
             transition: all 0.3s ease;
             border: 1px solid rgba(80, 40, 80, 0.3);
+            animation: pulse 2s infinite;
         }
 
         .main-server-button:hover {
@@ -294,6 +485,13 @@
         .perk-icon {
             font-size: 3rem;
             margin-bottom: 15px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .perk-card:hover .perk-icon {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 0 10px rgba(179, 142, 93, 0.5));
         }
 
         .perk-name {
@@ -331,6 +529,7 @@
         .discord-icon {
             font-size: 4rem;
             margin-bottom: 20px;
+            animation: pulse 3s infinite;
         }
 
         .discord-title {
@@ -361,6 +560,27 @@
             display: inline-block;
             margin: 10px 5px;
             border: 1px solid rgba(100, 40, 40, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+
+        .discord-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .discord-button:hover::after {
+            width: 300px;
+            height: 300px;
         }
 
         .discord-button:hover {
@@ -384,6 +604,27 @@
             margin: 10px 5px;
             font-weight: bold;
             border: 1px solid rgba(80, 40, 80, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+
+        .support-server-button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .support-server-button:hover::after {
+            width: 300px;
+            height: 300px;
         }
 
         .support-server-button:hover {
@@ -418,6 +659,13 @@
         .feature-icon {
             font-size: 2rem;
             margin-bottom: 15px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 0 10px rgba(179, 142, 93, 0.5));
         }
 
         .scripts-container {
@@ -458,6 +706,13 @@
 
         .script-icon {
             font-size: 2.5rem;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .script-button:hover .script-icon {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 0 10px rgba(179, 142, 93, 0.5));
         }
 
         .script-name {
@@ -559,6 +814,13 @@
         .executer-icon {
             font-size: 2.5rem;
             margin-bottom: 10px;
+            transition: all 0.3s ease;
+            transform-origin: center;
+        }
+
+        .executer-card:hover .executer-icon {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 0 10px rgba(179, 142, 93, 0.5));
         }
 
         .executer-name {
@@ -989,686 +1251,721 @@
         .legend-coming {
             background: #b8c2cc;
         }
-
-        .loading-status {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #ffd966;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        .api-error {
-            background: rgba(220, 53, 69, 0.1);
-            border: 2px solid rgba(220, 53, 69, 0.4);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .api-error h3 {
-            color: #ff6b7a;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .manual-update-section {
-            background: rgba(40, 20, 40, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .manual-update-section h3 {
-            color: #b28cff;
-            margin-bottom: 15px;
-        }
-
-        .status-input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .status-select {
-            background: rgba(30, 10, 10, 0.6);
-            color: #e0e0e0;
-            border: 1px solid rgba(80, 40, 80, 0.4);
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 0.9rem;
-        }
-
-        .update-button {
-            background: rgba(111, 66, 193, 0.6);
-            color: #e0e0e0;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(111, 66, 193, 0.4);
-        }
-
-        .update-button:hover {
-            background: rgba(111, 66, 193, 0.8);
-            transform: translateY(-2px);
-        }
-
-        .proxy-status {
-            background: rgba(179, 142, 93, 0.1);
-            border: 2px solid rgba(179, 142, 93, 0.4);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .proxy-status.connected {
-            background: rgba(40, 167, 69, 0.1);
-            border-color: rgba(40, 167, 69, 0.4);
-        }
-
-        .proxy-status.error {
-            background: rgba(220, 53, 69, 0.1);
-            border-color: rgba(220, 53, 69, 0.4);
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <img src="1760377122964.png" alt="CPS Network Logo" class="logo">
-        
-        <div class="header">
-            <h1>💸 CPS Network</h1>
-            <p class="subtitle">Premium Services & Community</p>
+    <canvas id="animated-bg"></canvas>
+    <div class="glow-effect"></div>
+    <div class="grid-effect"></div>
+
+    <div class="technical-issues">
+        <div class="issues-icon">🔧</div>
+        <h1 class="issues-title">Technical Issues</h1>
+        <p class="issues-text">The website is currently undergoing maintenance. We are working to improve your experience and will be back soon.</p>
+        <div class="issues-text">The website will be available again shortly. Thank you for your understanding.</div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <img src="1760377122964.png" alt="CPS Network Logo" class="logo">
             
-            <div class="tabs">
-                <button class="tab-button active" data-tab="premium">Premium</button>
-                <button class="tab-button" data-tab="discord">Discord Info</button>
-                <button class="tab-button" data-tab="scripts">Script List</button>
-                <button class="tab-button" data-tab="executers">Supported Executers</button>
-                <button class="tab-button" data-tab="changelogs">Changelogs</button>
-            </div>
-        </div>
-
-        <div class="tab-content active" id="premium-tab">
-            <!-- Premium content remains the same -->
-            <div class="service">
-                <h2 class="service-title">🪓 99 NIGHTS HUB & DIAMONDS/DAYS FARM</h2>
+            <div class="header">
+                <h1>💸 CPS Network</h1>
+                <p class="subtitle">Premium Services & Community</p>
                 
-                <div class="plan">
-                    <div class="plan-header">
-                        <span class="plan-name">👑 Lifetime Plan</span>
-                    </div>
-                    <div class="price">💲 950 Robux</div>
-                </div>
-                
-                <div class="plan">
-                    <div class="plan-header">
-                        <span class="plan-name">✨ Monthly Plan</span>
-                    </div>
-                    <div class="price">💲 550 Robux</div>
-                    <div class="features">
-                        <div class="feature">💎 2 Server Boosts</div>
-                    </div>
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="premium">Premium</button>
+                    <button class="tab-button" data-tab="discord">Discord Info</button>
+                    <button class="tab-button" data-tab="scripts">Script List</button>
+                    <button class="tab-button" data-tab="executers">Supported Executers</button>
+                    <button class="tab-button" data-tab="changelogs">Changelogs</button>
                 </div>
             </div>
 
-            <div class="service">
-                <h2 class="service-title">⚽ TOUCH FOOTBALL KEYLESS</h2>
-                
-                <div class="plan">
-                    <div class="plan-header">
-                        <span class="plan-name">👑 Lifetime Plan</span>
-                    </div>
-                    <div class="price">💲 1450 Robux</div>
-                    <div class="price">💸 $13.99 PayPal</div>
-                </div>
-                
-                <div class="plan">
-                    <div class="plan-header">
-                        <span class="plan-name">✨ Monthly Plan</span>
-                    </div>
-                    <div class="price">💲 550 Robux</div>
-                    <div class="price">💸 $4.99 PayPal</div>
-                    <div class="features">
-                        <div class="feature">💎 2 Server Boosts</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="premium-perks">
-                <h2 class="perks-title">✨ Premium Perks</h2>
-                <div class="perks-grid">
-                    <div class="perk-card">
-                        <div class="perk-icon">🪓</div>
-                        <div class="perk-name">99 Nights Hub Gui</div>
-                        <div class="perk-features">
-                            <div class="perk-feature">✅ Keyless</div>
-                            <div class="perk-feature">✅ Priority Support</div>
+            <div class="tab-content active" id="premium-tab">
+                <div class="service">
+                    <h2 class="service-title">🪓 99 NIGHTS HUB & DIAMONDS/DAYS FARM</h2>
+                    
+                    <div class="plan">
+                        <div class="plan-header">
+                            <span class="plan-name">👑 Lifetime Plan</span>
                         </div>
+                        <div class="price">💲 950 Robux</div>
                     </div>
                     
-                    <div class="perk-card">
-                        <div class="perk-icon">💎</div>
-                        <div class="perk-name">Diamonds & Days Farm</div>
-                        <div class="perk-features">
-                            <div class="perk-feature">✅ Keyless</div>
-                            <div class="perk-feature">✅ Priority Support</div>
+                    <div class="plan">
+                        <div class="plan-header">
+                            <span class="plan-name">✨ Monthly Plan</span>
                         </div>
-                    </div>
-                    
-                    <div class="perk-card">
-                        <div class="perk-icon">⚽</div>
-                        <div class="perk-name">Touch Football</div>
-                        <div class="perk-features">
-                            <div class="perk-feature">✅ Keyless</div>
-                            <div class="perk-feature">✅ Priority Support</div>
+                        <div class="price">💲 550 Robux</div>
+                        <div class="features">
+                            <div class="feature">💎 2 Server Boosts</div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="notes-container">
-                <div class="note-row">
-                    <div class="warning">⚠️ All robux payments are done "tax covered"!</div>
-                    <div class="warning">ℹ️ No refunds.</div>
-                    <div class="purchase-info">💸 Open A Ticket To Purchase In Discord Server</div>
-                    <a href="https://discord.gg/uCq6dNAfRV" class="main-server-button" target="_blank">
-                        🏠 Main Server
-                    </a>
-                    <a href="https://discord.gg/FhK8UGTtU8" class="support-button" target="_blank">
-                        🛠️ Support Server
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="discord-tab">
-            <!-- Discord content remains the same -->
-            <div class="discord-container">
-                <div class="discord-widget">
-                    <div class="discord-icon">🎮</div>
-                    <h2 class="discord-title">Join Our Discord Community</h2>
-                    <p class="discord-description">
-                        Connect with our growing community of gamers, get support for our products, 
-                        stay updated with the latest news, and participate in exclusive events!
-                    </p>
+                <div class="service">
+                    <h2 class="service-title">⚽ TOUCH FOOTBALL KEYLESS</h2>
                     
-                    <div class="button-group">
-                        <a href="https://discord.gg/uCq6dNAfRV" class="discord-button" target="_blank">
-                            Join Discord Server
+                    <div class="plan">
+                        <div class="plan-header">
+                            <span class="plan-name">👑 Lifetime Plan</span>
+                        </div>
+                        <div class="price">💲 1450 Robux</div>
+                        <div class="price">💸 $13.99 PayPal</div>
+                    </div>
+                    
+                    <div class="plan">
+                        <div class="plan-header">
+                            <span class="plan-name">✨ Monthly Plan</span>
+                        </div>
+                        <div class="price">💲 550 Robux</div>
+                        <div class="price">💸 $4.99 PayPal</div>
+                        <div class="features">
+                            <div class="feature">💎 2 Server Boosts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="premium-perks">
+                    <h2 class="perks-title">✨ Premium Perks</h2>
+                    <div class="perks-grid">
+                        <div class="perk-card">
+                            <div class="perk-icon">🪓</div>
+                            <div class="perk-name">99 Nights Hub Gui</div>
+                            <div class="perk-features">
+                                <div class="perk-feature">✅ Keyless</div>
+                                <div class="perk-feature">✅ Priority Support</div>
+                            </div>
+                        </div>
+                        
+                        <div class="perk-card">
+                            <div class="perk-icon">💎</div>
+                            <div class="perk-name">Diamonds & Days Farm</div>
+                            <div class="perk-features">
+                                <div class="perk-feature">✅ Keyless</div>
+                                <div class="perk-feature">✅ Priority Support</div>
+                            </div>
+                        </div>
+                        
+                        <div class="perk-card">
+                            <div class="perk-icon">⚽</div>
+                            <div class="perk-name">Touch Football</div>
+                            <div class="perk-features">
+                                <div class="perk-feature">✅ Keyless</div>
+                                <div class="perk-feature">✅ Priority Support</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notes-container">
+                    <div class="note-row">
+                        <div class="warning">⚠️ All robux payments are done "tax covered"!</div>
+                        <div class="warning">ℹ️ No refunds.</div>
+                        <div class="purchase-info">💸 Open A Ticket To Purchase In Discord Server</div>
+                        <a href="https://discord.gg/uCq6dNAfRV" class="main-server-button" target="_blank">
+                            🏠 Main Server
                         </a>
-                        <a href="https://discord.gg/FhK8UGTtU8" class="support-server-button" target="_blank">
+                        <a href="https://discord.gg/FhK8UGTtU8" class="support-button" target="_blank">
                             🛠️ Support Server
                         </a>
                     </div>
                 </div>
-                
-                <div class="discord-features">
-                    <div class="feature-card">
-                        <div class="feature-icon">💬</div>
-                        <h3>Active Community</h3>
-                        <p>Chat with other members and share your experiences</p>
+            </div>
+
+            <div class="tab-content" id="discord-tab">
+                <div class="discord-container">
+                    <div class="discord-widget">
+                        <div class="discord-icon">🎮</div>
+                        <h2 class="discord-title">Join Our Discord Community</h2>
+                        <p class="discord-description">
+                            Connect with our growing community of gamers, get support for our products, 
+                            stay updated with the latest news, and participate in exclusive events!
+                        </p>
+                        
+                        <div class="button-group">
+                            <a href="https://discord.gg/uCq6dNAfRV" class="discord-button" target="_blank">
+                                Join Discord Server
+                            </a>
+                            <a href="https://discord.gg/FhK8UGTtU8" class="support-server-button" target="_blank">
+                                🛠️ Support Server
+                            </a>
+                        </div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🛠️</div>
-                        <h3>Quick Support</h3>
-                        <p>Get help with any issues or questions you might have</p>
+                    
+                    <div class="discord-features">
+                        <div class="feature-card">
+                            <div class="feature-icon">💬</div>
+                            <h3>Active Community</h3>
+                            <p>Chat with other members and share your experiences</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🛠️</div>
+                            <h3>Quick Support</h3>
+                            <p>Get help with any issues or questions you might have</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🚀</div>
+                            <h3>Latest Updates</h3>
+                            <p>Be the first to know about new features and products</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Exclusive Content</h3>
+                            <p>Access special channels and content for members</p>
+                        </div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🚀</div>
-                        <h3>Latest Updates</h3>
-                        <p>Be the first to know about new features and products</p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="scripts-tab">
+                <div class="scripts-container">
+                    <h2 class="service-title">📜 Available Scripts</h2>
+                    <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">Click on any script to get options</p>
+                    
+                    <div class="script-grid">
+                        <div class="script-button" onclick="showScriptModal('Universal Gui')">
+                            <div class="script-icon">🌐</div>
+                            <div class="script-name">Universal GUI Script</div>
+                        </div>
+                        
+                        <div class="script-button" onclick="showScriptModal('Touch Football Script')">
+                            <div class="script-icon">⚽</div>
+                            <div class="script-name">Touch Football Script</div>
+                        </div>
+                        
+                        <div class="script-button" onclick="showScriptModal('PVB Script')">
+                            <div class="script-icon">🛡️</div>
+                            <div class="script-name">PVB Script</div>
+                        </div>
+                        
+                        <div class="script-button" onclick="show99NightsModal()">
+                            <div class="script-icon">🌙</div>
+                            <div class="script-name">99 Nights Script</div>
+                        </div>
+                        
+                        <div class="script-button" onclick="showTSBModal()">
+                            <div class="script-icon">🏈</div>
+                            <div class="script-name">TSB Script</div>
+                        </div>
                     </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">🎯</div>
-                        <h3>Exclusive Content</h3>
-                        <p>Access special channels and content for members</p>
+
+                    <div class="script-warning">
+                        <h3>⚠️ Important Notice</h3>
+                        <p>This list is NOT automatically updated and may not include newly added scripts. 
+                        Always check the Discord server for the most current script list and updates.</p>
+                    </div>
+
+                    <div class="script-support">
+                        <h3 style="margin-bottom: 15px; color: #b38e5d;">🐛 Found a bug or script not working?</h3>
+                        <p style="margin-bottom: 20px; opacity: 0.8; color: #c0c0c0;">Open a ticket on our support server and our team will help you!</p>
+                        <a href="https://discord.gg/FhK8UGTtU8" class="support-server-button" target="_blank">
+                            🛠️ Open Support Ticket
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="executers-tab">
+                <div class="executers-container">
+                    <h2 class="service-title">⚙️ Supported Executers</h2>
+                    <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">Click on any executor to get more information</p>
+                    
+                    <div class="status-check-notice">
+                        <h3>🔍 Status Information</h3>
+                        <p>Statuses are not updated automatically and may not be accurate. Always check <strong>weao.xyz</strong> for accurate and current executor statuses.</p>
+                        <a href="https://weao.xyz/" class="status-check-link" target="_blank">
+                            📊 Check accurate statuses on weao.xyz
+                        </a>
+                    </div>
+                    
+                    <div class="platform-tabs">
+                        <button class="platform-tab active" data-platform="pc">💻 PC</button>
+                        <button class="platform-tab" data-platform="mac">🍎 Mac</button>
+                        <button class="platform-tab" data-platform="android">📱 Android</button>
+                        <button class="platform-tab" data-platform="ios">📱 iOS</button>
+                    </div>
+                    
+                    <div class="platform-content active" id="pc-content">
+                        <h3 style="margin-bottom: 20px; color: #b38e5d;">PC Executers</h3>
+                        <div class="executers-grid">
+                            <div class="executer-card" onclick="showExecuterInfo('Volcano', 'Free (Key System)', 'https://volcano.wtf')">
+                                <div class="executer-icon">🌋</div>
+                                <div class="executer-name">Volcano</div>
+                                <div class="executer-price">Free (Key System)</div>
+                                <div class="status-container" id="status-Volcano"></div>
+                                <div class="executer-website">volcano.wtf</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Velocity', 'Free', 'https://getvelocity.lol')">
+                                <div class="executer-icon">⚡</div>
+                                <div class="executer-name">Velocity</div>
+                                <div class="executer-price">Free</div>
+                                <div class="status-container" id="status-Velocity"></div>
+                                <div class="executer-website">getvelocity.lol</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Wave', 'Paid - $7.49 Weekly', 'https://getwave.gg')">
+                                <div class="executer-icon">🌊</div>
+                                <div class="executer-name">Wave</div>
+                                <div class="executer-price">Paid - $7.49 Weekly</div>
+                                <div class="status-container" id="status-Wave"></div>
+                                <div class="executer-website">getwave.gg</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Volt', 'Paid - $8 Weekly', 'https://volt.bz')">
+                                <div class="executer-icon">🔌</div>
+                                <div class="executer-name">Volt</div>
+                                <div class="executer-price">Paid - $8 Weekly</div>
+                                <div class="status-container" id="status-Volt"></div>
+                                <div class="executer-website">volt.bz</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Seliware', 'Paid - $9.99 Monthly', 'https://seliware.com')">
+                                <div class="executer-icon">🛡️</div>
+                                <div class="executer-name">Seliware</div>
+                                <div class="executer-price">Paid - $9.99 Monthly</div>
+                                <div class="status-container" id="status-Seliware"></div>
+                                <div class="executer-website">seliware.com</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Swift', 'Free (Key System)', 'https://getswift.vip')">
+                                <div class="executer-icon">💨</div>
+                                <div class="executer-name">Swift</div>
+                                <div class="executer-price">Free (Key System)</div>
+                                <div class="status-container" id="status-Swift"></div>
+                                <div class="executer-website">getswift.vip</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Valex', 'Free (Key System)', 'https://valex.io')">
+                                <div class="executer-icon">🔮</div>
+                                <div class="executer-name">Valex</div>
+                                <div class="executer-price">Free (Key System)</div>
+                                <div class="status-container" id="status-Valex"></div>
+                                <div class="executer-website">valex.io</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Potassium', 'Paid - $24.99 Lifetime', 'https://potassium.pro')">
+                                <div class="executer-icon">🥔</div>
+                                <div class="executer-name">Potassium</div>
+                                <div class="executer-price">Paid - $24.99 Lifetime</div>
+                                <div class="status-container" id="status-Potassium"></div>
+                                <div class="executer-website">potassium.pro</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Bunni.lol', 'Free (Key System)', 'https://realbunni.com')">
+                                <div class="executer-icon">🐰</div>
+                                <div class="executer-name">Bunni.lol</div>
+                                <div class="executer-price">Free (Key System)</div>
+                                <div class="status-container" id="status-Bunni.lol"></div>
+                                <div class="executer-website">realbunni.com</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Sirhurt', 'Paid - $2.80 Weekly', 'https://sirhurt.net')">
+                                <div class="executer-icon">👑</div>
+                                <div class="executer-name">Sirhurt</div>
+                                <div class="executer-price">Paid - $2.80 Weekly</div>
+                                <div class="status-container" id="status-Sirhurt"></div>
+                                <div class="executer-website">sirhurt.net</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('ChocoSploit', 'Paid - $10 Monthly (Private)', 'https://discord.gg/PwyPTUuxfZ')">
+                                <div class="executer-icon">🍫</div>
+                                <div class="executer-name">ChocoSploit</div>
+                                <div class="executer-price">Paid - $10 Monthly (Private)</div>
+                                <div class="status-container" id="status-ChocoSploit"></div>
+                                <div class="executer-website">discord.gg/PwyPTUuxfZ</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="platform-content" id="mac-content">
+                        <h3 style="margin-bottom: 20px; color: #b38e5d;">Mac Executers</h3>
+                        <div class="executers-grid">
+                            <div class="executer-card" onclick="showExecuterInfo('Hydrogen', 'Free (Key System)', 'https://hydrogen.lat')">
+                                <div class="executer-icon">💧</div>
+                                <div class="executer-name">Hydrogen</div>
+                                <div class="executer-price">Free (Key System)</div>
+                                <div class="status-container" id="status-Hydrogen"></div>
+                                <div class="executer-website">hydrogen.lat</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Macsploit', 'Paid - $8 Lifetime', 'https://abyssdigital.xyz')">
+                                <div class="executer-icon">🍎</div>
+                                <div class="executer-name">Macsploit</div>
+                                <div class="executer-price">Paid - $8 Lifetime</div>
+                                <div class="status-container" id="status-Macsploit"></div>
+                                <div class="executer-website">abyssdigital.xyz</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Cryptic', 'Paid - $17.40 Lifetime', 'https://reapstore.mysellauth.com/product/cryptic-mac')">
+                                <div class="executer-icon">🔐</div>
+                                <div class="executer-name">Cryptic</div>
+                                <div class="executer-price">Paid - $17.40 Lifetime</div>
+                                <div class="status-container" id="status-Cryptic"></div>
+                                <div class="executer-website">reapstore.mysellauth.com</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="platform-content" id="android-content">
+                        <h3 style="margin-bottom: 20px; color: #b38e5d;">Android Executers</h3>
+                        <div class="executers-grid">
+                            <div class="executer-card" onclick="showExecuterInfo('Codex', 'Free', 'https://codex.lol')">
+                                <div class="executer-icon">📜</div>
+                                <div class="executer-name">Codex</div>
+                                <div class="executer-price">Free</div>
+                                <div class="status-container" id="status-Codex"></div>
+                                <div class="executer-website">codex.lol</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Cryptic Android', 'Free', 'https://getcryptic.net')">
+                                <div class="executer-icon">🔐</div>
+                                <div class="executer-name">Cryptic</div>
+                                <div class="executer-price">Free</div>
+                                <div class="status-container" id="status-Cryptic-Android"></div>
+                                <div class="executer-website">getcryptic.net</div>
+                            </div>
+                            <div class="executer-card" onclick="showExecuterInfo('Delta', 'Free (Key System)', 'https://deltaexploits.gg')">
+                                <div class="executer-icon">Δ</div>
+                                <div class="executer-name">Delta</div>
+                                <div class="executer-price">Free (Key System)</div>
+                                <div class="status-container" id="status-Delta"></div>
+                                <div class="executer-website">deltaexploits.gg</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="platform-content" id="ios-content">
+                        <h3 style="margin-bottom: 20px; color: #b38e5d;">iOS Executers</h3>
+                        <div class="executers-grid">
+                            <div class="executer-card" onclick="showExecuterInfo('Delta iOS', 'Free (Key System)', 'https://deltaexploits.gg')">
+                                <div class="executer-icon">Δ</div>
+                                <div class="executer-name">Delta</div>
+                                <div class="executer-price">Free (Key System)</div>
+                                <div class="status-container" id="status-Delta-iOS"></div>
+                                <div class="executer-website">deltaexploits.gg</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="changelogs-tab">
+                <div class="changelogs-container">
+                    <h2 class="service-title">📃 Changelogs</h2>
+                    <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">CPS Network website change history</p>
+                    
+                    <div class="legend">
+                        <div class="legend-item">
+                            <div class="legend-color legend-added"></div>
+                            <span>Added - New features or content added</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-removed"></div>
+                            <span>Removed - Features or content removed</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-fixed"></div>
+                            <span>Fixed - Bugs or issues resolved</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color legend-coming"></div>
+                            <span>Coming - Upcoming features or changes</span>
+                        </div>
+                    </div>
+                    
+                    <div class="changelog-list">
+                        <div class="changelog-item">
+                            <div class="changelog-header">
+                                <div class="changelog-type added">ADDED</div>
+                            </div>
+                            <div class="changelog-description">
+                                Added new injector Cryptic to the list of supported executors for Mac
+                            </div>
+                            <div class="changelog-details">
+                                Added Cryptic injector to the Mac executors list.
+                            </div>
+                        </div>
+                        
+                        <div class="changelog-item">
+                            <div class="changelog-header">
+                                <div class="changelog-type added">ADDED</div>
+                            </div>
+                            <div class="changelog-description">
+                                Added new injector ChocoSploit to the list of supported executors
+                            </div>
+                            <div class="changelog-details">
+                                Added ChocoSploit injector to the PC executors list.
+                            </div>
+                        </div>
+                        
+                        <div class="changelog-item">
+                            <div class="changelog-header">
+                                <div class="changelog-type removed">REMOVED</div>
+                            </div>
+                            <div class="changelog-description">
+                                Removed Zenith from the list of supported executors
+                            </div>
+                            <div class="changelog-details">
+                                Zenith no longer works and has been removed from all executor lists.
+                            </div>
+                        </div>
+                        
+                        <div class="changelog-item">
+                            <div class="changelog-header">
+                                <div class="changelog-type added">ADDED</div>
+                            </div>
+                            <div class="changelog-description">
+                                Added CPS Network website
+                            </div>
+                            <div class="changelog-details">
+                                Initial website design added with Premium, Discord Info, Script List and Supported Executers tabs.
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="tab-content" id="scripts-tab">
-            <!-- Scripts content remains the same -->
-            <div class="scripts-container">
-                <h2 class="service-title">📜 Available Scripts</h2>
-                <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">Click on any script to get options</p>
-                
-                <div class="script-grid">
-                    <div class="script-button" onclick="showScriptModal('Universal Gui')">
-                        <div class="script-icon">🌐</div>
-                        <div class="script-name">Universal GUI Script</div>
-                    </div>
-                    
-                    <div class="script-button" onclick="showScriptModal('Touch Football Script')">
-                        <div class="script-icon">⚽</div>
-                        <div class="script-name">Touch Football Script</div>
-                    </div>
-                    
-                    <div class="script-button" onclick="showScriptModal('PVB Script')">
-                        <div class="script-icon">🛡️</div>
-                        <div class="script-name">PVB Script</div>
-                    </div>
-                    
-                    <div class="script-button" onclick="show99NightsModal()">
-                        <div class="script-icon">🌙</div>
-                        <div class="script-name">99 Nights Script</div>
-                    </div>
-                    
-                    <div class="script-button" onclick="showTSBModal()">
-                        <div class="script-icon">🏈</div>
-                        <div class="script-name">TSB Script</div>
-                    </div>
+        <div id="executerModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeExecuterModal()">&times;</span>
+                <h2 class="modal-title" id="executerModalTitle">Executer Info</h2>
+                <div id="executerModalContent">
                 </div>
-
-                <div class="script-warning">
-                    <h3>⚠️ Important Notice</h3>
-                    <p>This list is NOT automatically updated and may not include newly added scripts. 
-                    Always check the Discord server for the most current script list and updates.</p>
-                </div>
-
-                <div class="script-support">
-                    <h3 style="margin-bottom: 15px; color: #b38e5d;">🐛 Found a bug or script not working?</h3>
-                    <p style="margin-bottom: 20px; opacity: 0.8; color: #c0c0c0;">Open a ticket on our support server and our team will help you!</p>
-                    <a href="https://discord.gg/FhK8UGTtU8" class="support-server-button" target="_blank">
-                        🛠️ Open Support Ticket
-                    </a>
+            </div>
+        </div>
+        
+        <div id="scriptModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeScriptModal()">&times;</span>
+                <h2 class="modal-title" id="scriptModalTitle">Script Options</h2>
+                <div id="scriptModalContent">
                 </div>
             </div>
         </div>
 
-        <div class="tab-content" id="executers-tab">
-            <div class="executers-container">
-                <h2 class="service-title">⚙️ Supported Executers</h2>
-                <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">Click on any executor to get more information</p>
-                
-                <!-- Updated Proxy Status Section -->
-                <div class="proxy-status" id="proxyStatus">
-                    <h3>🔍 Proxy Server Status</h3>
-                    <p>Connected to WispByte Proxy: <code>http://217.154.212.188:9290</code></p>
-                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 15px;">
-                        <div class="loading-status" id="loadingIndicator"></div>
-                        <span id="apiStatus">Checking proxy connection...</span>
-                    </div>
-                    <div id="apiErrorContainer" style="display: none;"></div>
-                    <a href="http://217.154.212.188:9290" class="status-check-link" target="_blank">
-                        🔧 Proxy Dashboard
-                    </a>
-                </div>
-
-                <div class="manual-update-section">
-                    <h3>🔄 Manual Status Update</h3>
-                    <p>If you know the current status of an executor, you can update it manually:</p>
-                    <div class="status-input-group">
-                        <select id="executorSelect" class="status-select">
-                            <option value="">Select Executor</option>
-                            <option value="Volcano">Volcano</option>
-                            <option value="Velocity">Velocity</option>
-                            <option value="Wave">Wave</option>
-                            <option value="Volt">Volt</option>
-                            <option value="Seliware">Seliware</option>
-                            <option value="Swift">Swift</option>
-                            <option value="Valex">Valex</option>
-                            <option value="Potassium">Potassium</option>
-                            <option value="Bunni.lol">Bunni.lol</option>
-                            <option value="Sirhurt">Sirhurt</option>
-                            <option value="Hydrogen">Hydrogen</option>
-                            <option value="Macsploit">Macsploit</option>
-                            <option value="Codex">Codex</option>
-                            <option value="Cryptic">Cryptic</option>
-                            <option value="Cryptic-Android">Cryptic Android</option>
-                            <option value="Delta">Delta</option>
-                            <option value="Delta-iOS">Delta iOS</option>
-                            <option value="ChocoSploit">ChocoSploit</option>
-                        </select>
-                        <select id="updateStatusSelect" class="status-select">
-                            <option value="Updated">Updated</option>
-                            <option value="Not Updated">Not Updated</option>
-                            <option value="Unknown">Unknown</option>
-                        </select>
-                        <select id="detectStatusSelect" class="status-select">
-                            <option value="Undetected">Undetected</option>
-                            <option value="Detected">Detected</option>
-                            <option value="Unknown">Unknown</option>
-                        </select>
-                        <button class="update-button" onclick="updateManualStatus()">Update Status</button>
-                    </div>
-                    <p style="font-size: 0.8rem; opacity: 0.7; margin-top: 10px;">
-                        Note: Manual updates are saved in your browser only and will reset when you clear cache.
-                    </p>
-                </div>
-                
-                <div class="platform-tabs">
-                    <button class="platform-tab active" data-platform="pc">💻 PC</button>
-                    <button class="platform-tab" data-platform="mac">🍎 Mac</button>
-                    <button class="platform-tab" data-platform="android">📱 Android</button>
-                    <button class="platform-tab" data-platform="ios">📱 iOS</button>
-                </div>
-                
-                <!-- PC Executers -->
-                <div class="platform-content active" id="pc-content">
-                    <h3 style="margin-bottom: 20px; color: #b38e5d;">PC Executers</h3>
-                    <div class="executers-grid">
-                        <div class="executer-card" onclick="showExecuterInfo('Volcano', 'Free (Key System)', 'https://volcano.wtf')">
-                            <div class="executer-icon">🌋</div>
-                            <div class="executer-name">Volcano</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Volcano"></div>
-                            <div class="executer-website">volcano.wtf</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Velocity', 'Free', 'https://getvelocity.lol')">
-                            <div class="executer-icon">⚡</div>
-                            <div class="executer-name">Velocity</div>
-                            <div class="executer-price">Free</div>
-                            <div class="status-container" id="status-Velocity"></div>
-                            <div class="executer-website">getvelocity.lol</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Wave', 'Paid - $7.49 Weekly', 'https://getwave.gg')">
-                            <div class="executer-icon">🌊</div>
-                            <div class="executer-name">Wave</div>
-                            <div class="executer-price">Paid - $7.49 Weekly</div>
-                            <div class="status-container" id="status-Wave"></div>
-                            <div class="executer-website">getwave.gg</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Volt', 'Paid - $8 Weekly', 'https://volt.bz')">
-                            <div class="executer-icon">🔌</div>
-                            <div class="executer-name">Volt</div>
-                            <div class="executer-price">Paid - $8 Weekly</div>
-                            <div class="status-container" id="status-Volt"></div>
-                            <div class="executer-website">volt.bz</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Seliware', 'Paid - $9.99 Monthly', 'https://seliware.com')">
-                            <div class="executer-icon">🛡️</div>
-                            <div class="executer-name">Seliware</div>
-                            <div class="executer-price">Paid - $9.99 Monthly</div>
-                            <div class="status-container" id="status-Seliware"></div>
-                            <div class="executer-website">seliware.com</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Swift', 'Free (Key System)', 'https://getswift.vip')">
-                            <div class="executer-icon">💨</div>
-                            <div class="executer-name">Swift</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Swift"></div>
-                            <div class="executer-website">getswift.vip</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Valex', 'Free (Key System)', 'https://valex.io')">
-                            <div class="executer-icon">🔮</div>
-                            <div class="executer-name">Valex</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Valex"></div>
-                            <div class="executer-website">valex.io</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Potassium', 'Paid - $24.99 Lifetime', 'https://potassium.pro')">
-                            <div class="executer-icon">🥔</div>
-                            <div class="executer-name">Potassium</div>
-                            <div class="executer-price">Paid - $24.99 Lifetime</div>
-                            <div class="status-container" id="status-Potassium"></div>
-                            <div class="executer-website">potassium.pro</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Bunni.lol', 'Free (Key System)', 'https://realbunni.com')">
-                            <div class="executer-icon">🐰</div>
-                            <div class="executer-name">Bunni.lol</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Bunni.lol"></div>
-                            <div class="executer-website">realbunni.com</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Sirhurt', 'Paid - $2.80 Weekly', 'https://sirhurt.net')">
-                            <div class="executer-icon">👑</div>
-                            <div class="executer-name">Sirhurt</div>
-                            <div class="executer-price">Paid - $2.80 Weekly</div>
-                            <div class="status-container" id="status-Sirhurt"></div>
-                            <div class="executer-website">sirhurt.net</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('ChocoSploit', 'Paid - $10 Monthly (Private)', 'https://discord.gg/PwyPTUuxfZ')">
-                            <div class="executer-icon">🍫</div>
-                            <div class="executer-name">ChocoSploit</div>
-                            <div class="executer-price">Paid - $10 Monthly (Private)</div>
-                            <div class="status-container" id="status-ChocoSploit"></div>
-                            <div class="executer-website">discord.gg/PwyPTUuxfZ</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Other platform contents remain the same -->
-                <div class="platform-content" id="mac-content">
-                    <h3 style="margin-bottom: 20px; color: #b38e5d;">Mac Executers</h3>
-                    <div class="executers-grid">
-                        <div class="executer-card" onclick="showExecuterInfo('Hydrogen', 'Free (Key System)', 'https://hydrogen.lat')">
-                            <div class="executer-icon">💧</div>
-                            <div class="executer-name">Hydrogen</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Hydrogen"></div>
-                            <div class="executer-website">hydrogen.lat</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Macsploit', 'Paid - $8 Lifetime', 'https://abyssdigital.xyz')">
-                            <div class="executer-icon">🍎</div>
-                            <div class="executer-name">Macsploit</div>
-                            <div class="executer-price">Paid - $8 Lifetime</div>
-                            <div class="status-container" id="status-Macsploit"></div>
-                            <div class="executer-website">abyssdigital.xyz</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Cryptic', 'Paid - $17.40 Lifetime', 'https://reapstore.mysellauth.com/product/cryptic-mac')">
-                            <div class="executer-icon">🔐</div>
-                            <div class="executer-name">Cryptic</div>
-                            <div class="executer-price">Paid - $17.40 Lifetime</div>
-                            <div class="status-container" id="status-Cryptic"></div>
-                            <div class="executer-website">reapstore.mysellauth.com</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="platform-content" id="android-content">
-                    <h3 style="margin-bottom: 20px; color: #b38e5d;">Android Executers</h3>
-                    <div class="executers-grid">
-                        <div class="executer-card" onclick="showExecuterInfo('Codex', 'Free', 'https://codex.lol')">
-                            <div class="executer-icon">📜</div>
-                            <div class="executer-name">Codex</div>
-                            <div class="executer-price">Free</div>
-                            <div class="status-container" id="status-Codex"></div>
-                            <div class="executer-website">codex.lol</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Cryptic Android', 'Free (Key System)', 'https://getcryptic.net')">
-                            <div class="executer-icon">🔐</div>
-                            <div class="executer-name">Cryptic</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Cryptic-Android"></div>
-                            <div class="executer-website">getcryptic.net</div>
-                        </div>
-                        <div class="executer-card" onclick="showExecuterInfo('Delta', 'Free (Key System)', 'https://deltaexploits.gg')">
-                            <div class="executer-icon">Δ</div>
-                            <div class="executer-name">Delta</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Delta"></div>
-                            <div class="executer-website">deltaexploits.gg</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="platform-content" id="ios-content">
-                    <h3 style="margin-bottom: 20px; color: #b38e5d;">iOS Executers</h3>
-                    <div class="executers-grid">
-                        <div class="executer-card" onclick="showExecuterInfo('Delta iOS', 'Free (Key System)', 'https://deltaexploits.gg')">
-                            <div class="executer-icon">Δ</div>
-                            <div class="executer-name">Delta</div>
-                            <div class="executer-price">Free (Key System)</div>
-                            <div class="status-container" id="status-Delta-iOS"></div>
-                            <div class="executer-website">deltaexploits.gg</div>
-                        </div>
-                    </div>
+        <div id="tsbModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeTSBModal()">&times;</span>
+                <h2 class="modal-title">Select TSB Script</h2>
+                <div class="script-modal-buttons">
+                    <button class="script-modal-button option" onclick="selectTSBScript('Auto Block')">
+                        🛡️ TSB Auto Block
+                    </button>
+                    <button class="script-modal-button option" onclick="selectTSBScript('Auto Techs')">
+                        🤖 TSB Auto Techs
+                    </button>
                 </div>
             </div>
         </div>
 
-        <div class="tab-content" id="changelogs-tab">
-            <!-- Changelogs content remains the same -->
-            <div class="changelogs-container">
-                <h2 class="service-title">📃 Changelogs</h2>
-                <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">CPS Network website change history</p>
-                
-                <div class="legend">
-                    <div class="legend-item">
-                        <div class="legend-color legend-added"></div>
-                        <span>Added - New features or content added</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color legend-removed"></div>
-                        <span>Removed - Features or content removed</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color legend-fixed"></div>
-                        <span>Fixed - Bugs or issues resolved</span>
-                    </div>
-                    <div class="legend-item">
-                        <div class="legend-color legend-coming"></div>
-                        <span>Coming - Upcoming features or changes</span>
-                    </div>
+        <div id="nightsModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" onclick="closeNightsModal()">&times;</span>
+                <h2 class="modal-title">Select 99 Nights Script</h2>
+                <div class="script-modal-buttons">
+                    <button class="script-modal-button option" onclick="selectNightsScript('Hub')">
+                        🌙 99 Nights Hub
+                    </button>
+                    <button class="script-modal-button option" onclick="selectNightsScript('AutoFarm')">
+                        💎 99 Nights AutoFarm
+                    </button>
                 </div>
-                
-                <div class="changelog-list">
-                    <div class="changelog-item">
-                        <div class="changelog-header">
-                            <div class="changelog-type added">ADDED</div>
-                            <div class="changelog-date">2024</div>
-                        </div>
-                        <div class="changelog-description">
-                            Added WEAO Proxy API integration for real-time executor statuses
-                        </div>
-                        <div class="changelog-details">
-                            Integrated with WEAO Proxy API to fetch real-time executor statuses and avoid CORS restrictions.
-                        </div>
-                    </div>
-                    
-                    <div class="changelog-item">
-                        <div class="changelog-header">
-                            <div class="changelog-type added">ADDED</div>
-                        </div>
-                        <div class="changelog-description">
-                            Added manual status update feature
-                        </div>
-                        <div class="changelog-details">
-                            Users can now manually update executor statuses when API is unavailable.
-                        </div>
-                    </div>
-                    
-                    <div class="changelog-item">
-                        <div class="changelog-header">
-                            <div class="changelog-type added">ADDED</div>
-                        </div>
-                        <div class="changelog-description">
-                            Added new injector Cryptic to the list of supported executors for Mac
-                        </div>
-                        <div class="changelog-details">
-                            Added Cryptic injector to the Mac executors list.
-                        </div>
-                    </div>
-                    
-                    <div class="changelog-item">
-                        <div class="changelog-header">
-                            <div class="changelog-type added">ADDED</div>
-                        </div>
-                        <div class="changelog-description">
-                            Added new injector ChocoSploit to the list of supported executors
-                        </div>
-                        <div class="changelog-details">
-                            Added ChocoSploit injector to the PC executors list.
-                        </div>
-                    </div>
-                    
-                    <div class="changelog-item">
-                        <div class="changelog-header">
-                            <div class="changelog-type removed">REMOVED</div>
-                        </div>
-                        <div class="changelog-description">
-                            Removed Zenith from the list of supported executors
-                        </div>
-                        <div class="changelog-details">
-                            Zenith no longer works and has been removed from all executor lists.
-                        </div>
-                    </div>
-                    
-                    <div class="changelog-item">
-                        <div class="changelog-header">
-                            <div class="changelog-type added">ADDED</div>
-                        </div>
-                        <div class="changelog-description">
-                            Added CPS Network website
-                        </div>
-                        <div class="changelog-details">
-                            Initial website design added with Premium, Discord Info, Script List and Supported Executers tabs.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modals remain the same -->
-    <div id="executerModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeExecuterModal()">&times;</span>
-            <h2 class="modal-title" id="executerModalTitle">Executer Info</h2>
-            <div id="executerModalContent">
-            </div>
-        </div>
-    </div>
-    
-    <div id="scriptModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeScriptModal()">&times;</span>
-            <h2 class="modal-title" id="scriptModalTitle">Script Options</h2>
-            <div id="scriptModalContent">
-            </div>
-        </div>
-    </div>
-
-    <div id="tsbModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeTSBModal()">&times;</span>
-            <h2 class="modal-title">Select TSB Script</h2>
-            <div class="script-modal-buttons">
-                <button class="script-modal-button option" onclick="selectTSBScript('Auto Block')">
-                    🛡️ TSB Auto Block
-                </button>
-                <button class="script-modal-button option" onclick="selectTSBScript('Auto Techs')">
-                    🤖 TSB Auto Techs
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <div id="nightsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeNightsModal()">&times;</span>
-            <h2 class="modal-title">Select 99 Nights Script</h2>
-            <div class="script-modal-buttons">
-                <button class="script-modal-button option" onclick="selectNightsScript('Hub')">
-                    🌙 99 Nights Hub
-                </button>
-                <button class="script-modal-button option" onclick="selectNightsScript('AutoFarm')">
-                    💎 99 Nights AutoFarm
-                </button>
             </div>
         </div>
     </div>
 
     <script>
-        // ==================== SCRIPT DATA ====================
+        const canvas = document.getElementById('animated-bg');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(100, Math.floor((canvas.width * canvas.height) / 10000));
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: Math.random() * 1 - 0.5,
+                    speedY: Math.random() * 1 - 0.5,
+                    color: `rgba(${Math.random() > 0.5 ? '179, 142, 93' : '168, 107, 107'}, ${Math.random() * 0.3 + 0.2})`
+                });
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                
+                if (particle.x > canvas.width || particle.x < 0) particle.speedX = -particle.speedX;
+                if (particle.y > canvas.height || particle.y < 0) particle.speedY = -particle.speedY;
+                
+                ctx.beginPath();
+                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                ctx.fillStyle = particle.color;
+                ctx.fill();
+                
+                particles.forEach(otherParticle => {
+                    const dx = particle.x - otherParticle.x;
+                    const dy = particle.y - otherParticle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(179, 142, 93, ${0.1 * (1 - distance/100)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(otherParticle.x, otherParticle.y);
+                        ctx.stroke();
+                    }
+                });
+                
+                if (mouse.x !== null && mouse.y !== null) {
+                    const dx = mouse.x - particle.x;
+                    const dy = mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < mouse.radius) {
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        const forceX = dx / distance * force * 10;
+                        const forceY = dy / distance * force * 10;
+                        
+                        particle.x -= forceX;
+                        particle.y -= forceY;
+                    }
+                }
+            });
+            
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        animateParticles();
+
+        function createFloatingParticles() {
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'floating-particle';
+                
+                const size = Math.random() * 3 + 1;
+                const startX = Math.random() * 100;
+                const duration = Math.random() * 20 + 10;
+                const delay = Math.random() * 5;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${startX}vw`;
+                particle.style.bottom = '0';
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                particle.style.animationDuration = `${duration}s`;
+                particle.style.animationDelay = `${delay}s`;
+                particle.style.setProperty('--dx', (Math.random() * 2 - 1).toFixed(2));
+                
+                const colors = [
+                    'rgba(179, 142, 93, 0.3)',
+                    'rgba(168, 107, 107, 0.3)',
+                    'rgba(111, 66, 193, 0.2)',
+                    'rgba(40, 167, 69, 0.2)'
+                ];
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, (duration + delay) * 1000);
+            }
+            
+            setTimeout(createFloatingParticles, 2000);
+        }
+
+        createFloatingParticles();
+
+        function handleScrollAnimations() {
+            const elements = document.querySelectorAll('.slide-in');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('slide-in');
+                }
+            });
+        }
+
+        document.querySelectorAll('.plan, .perk-card, .feature-card, .executer-card, .changelog-item').forEach(el => {
+            el.classList.add('slide-in');
+        });
+
+        window.addEventListener('scroll', handleScrollAnimations);
+        handleScrollAnimations();
+
+        setTimeout(() => {
+            document.querySelectorAll('.purchase-info, .discord-button, .support-server-button, .support-button, .main-server-button').forEach(el => {
+                el.classList.add('pulse-animation');
+            });
+        }, 1000);
+
+        let technicalIssues = false;
+        let UpdateStatus = {
+            "Volcano": "Updated",
+            "Velocity": "Not Updated", 
+            "Wave": "Updated",
+            "Volt": "Updated",
+            "Seliware": "Updated",
+            "Swift": "Not Updated",
+            "Valex": "Updated",
+            "Potassium":"Updated",
+            "Bunni.lol": "Updated",
+            "Sirhurt": "Updated",
+            "Hydrogen": "Not Updated",
+            "Macsploit": "Updated",
+            "Codex": "Updated",
+            "Cryptic": "Not Updated",
+            "Cryptic-Android": "Updated",
+            "Delta": "Updated",
+            "Delta-iOS": "Updated",
+            "ChocoSploit": "Updated"
+        };
+
+        let DetectStatus = {
+            "Volcano": "Undetected",
+            "Velocity": "Undetected",
+            "Wave": "Undetected",
+            "Volt": "Undetected",
+            "Seliware": "Undetected",
+            "Swift": "Detected",
+            "Valex": "Detected",
+            "Potassium": "Undetected",
+            "Bunni.lol": "Unknown",
+            "Sirhurt": "Undetected",
+            "Hydrogen": "Undetected",
+            "Macsploit": "Undetected",
+            "Codex": "Detected",
+            "Cryptic": "Undetected",
+            "Cryptic-Android": "Unknown",
+            "Delta": "Undetected",
+            "Delta-iOS": "Undetected",
+            "ChocoSploit": "Undetected"
+        };
+
         const scriptData = {
             "Universal Gui": {
                 code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Rx1m/CpsHub/refs/heads/main/CPSNetwork",true))()',
@@ -1700,343 +1997,6 @@
             }
         };
 
-        // ==================== WEAO PROXY API INTEGRATION ====================
-        const PROXY_BASE_URL = 'https://corsproxy.io/?http://217.154.212.188:9290';
-        const PROXY_API_URL = `${PROXY_BASE_URL}/api/status/exploits`;
-
-const executorNameMapping = {
-    "Volcano": "volcano",
-    "Velocity": "velocity", 
-    "Wave": "wave",
-    "Volt": "volt",
-    "Seliware": "seliware",
-    "Swift": "swift",
-    "Valex": "valex",
-    "Potassium": "potassium",
-    "Bunni.lol": "bunni",
-    "Sirhurt": "sirhurt",
-    "Hydrogen": "hydrogen",
-    "Macsploit": "macsploit",
-    "Codex": "codex",
-    "Cryptic": "cryptic",
-    "Cryptic-Android": "cryptic",
-    "Delta": "delta",
-    "Delta-iOS": "delta",
-    "ChocoSploit": "chocosploit"
-};
-
-// Fallback status data
-const fallbackStatusData = {
-    "Volcano": { updated: false, detected: false },
-    "Velocity": { updated: false, detected: false },
-    "Wave": { updated: true, detected: false },
-    "Volt": { updated: true, detected: false },
-    "Seliware": { updated: true, detected: false },
-    "Swift": { updated: false, detected: true },
-    "Valex": { updated: true, detected: true },
-    "Potassium": { updated: true, detected: false },
-    "Bunni.lol": { updated: true, detected: false },
-    "Sirhurt": { updated: true, detected: false },
-    "Hydrogen": { updated: false, detected: false },
-    "Macsploit": { updated: true, detected: false },
-    "Codex": { updated: true, detected: false },
-    "Cryptic": { updated: false, detected: false },
-    "Cryptic-Android": { updated: true, detected: false },
-    "Delta": { updated: true, detected: false },
-    "Delta-iOS": { updated: true, detected: false },
-    "ChocoSploit": { updated: false, detected: false }
-};
-
-// Global status objects
-let UpdateStatus = {};
-let DetectStatus = {};
-
-// Load statuses from localStorage or use fallback
-function loadStatuses() {
-    const savedUpdateStatus = localStorage.getItem('cpsUpdateStatus');
-    const savedDetectStatus = localStorage.getItem('cpsDetectStatus');
-    
-    if (savedUpdateStatus && savedDetectStatus) {
-        UpdateStatus = JSON.parse(savedUpdateStatus);
-        DetectStatus = JSON.parse(savedDetectStatus);
-        
-        // Fill in any missing executors with fallback data
-        Object.keys(fallbackStatusData).forEach(executor => {
-            if (!UpdateStatus[executor]) {
-                UpdateStatus[executor] = fallbackStatusData[executor].updated ? 'Updated' : 'Not Updated';
-            }
-            if (!DetectStatus[executor]) {
-                DetectStatus[executor] = fallbackStatusData[executor].detected ? 'Detected' : 'Undetected';
-            }
-        });
-    } else {
-        // Initialize with fallback data
-        Object.entries(fallbackStatusData).forEach(([executorName, status]) => {
-            UpdateStatus[executorName] = status.updated ? 'Updated' : 'Not Updated';
-            DetectStatus[executorName] = status.detected ? 'Detected' : 'Undetected';
-        });
-        saveStatuses();
-    }
-    
-    updateStatusIndicators();
-}
-
-// Save statuses to localStorage
-function saveStatuses() {
-    localStorage.setItem('cpsUpdateStatus', JSON.stringify(UpdateStatus));
-    localStorage.setItem('cpsDetectStatus', JSON.stringify(DetectStatus));
-}
-
-// Fetch status from proxy
-async function fetchWEAOStatus() {
-    const apiStatusElement = document.getElementById('apiStatus');
-    const loadingIndicator = document.getElementById('loadingIndicator');
-    const apiErrorContainer = document.getElementById('apiErrorContainer');
-    const proxyStatus = document.getElementById('proxyStatus');
-    
-    if (apiStatusElement) {
-        apiStatusElement.textContent = 'Fetching status via CORS proxy...';
-    }
-    if (loadingIndicator) {
-        loadingIndicator.style.display = 'inline-block';
-    }
-    if (apiErrorContainer) {
-        apiErrorContainer.style.display = 'none';
-    }
-    if (proxyStatus) {
-        proxyStatus.className = 'proxy-status';
-    }
-
-    try {
-        console.log('Fetching from:', PROXY_API_URL);
-        const response = await fetch(PROXY_API_URL, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            mode: 'cors'
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        
-        if (apiStatusElement) {
-            apiStatusElement.textContent = '✅ Connected via CORS Proxy';
-            apiStatusElement.style.color = '#6bff8d';
-        }
-        
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
-        }
-
-        if (proxyStatus) {
-            proxyStatus.className = 'proxy-status connected';
-        }
-
-        return data;
-    } catch (error) {
-        console.error('Error fetching from proxy:', error);
-        
-        if (apiStatusElement) {
-            apiStatusElement.textContent = '❌ CORS Proxy failed';
-            apiStatusElement.style.color = '#ff6b7a';
-        }
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
-        }
-        
-        if (proxyStatus) {
-            proxyStatus.className = 'proxy-status error';
-        }
-        
-        // Show error
-        if (apiErrorContainer) {
-            apiErrorContainer.innerHTML = `
-                <div class="api-error">
-                    <h3>⚠️ CORS Proxy Connection Error</h3>
-                    <p>Unable to connect via CORS proxy. Showing cached status data.</p>
-                    <p><strong>Error:</strong> ${error.message}</p>
-                    <p><strong>Trying URL:</strong> ${PROXY_API_URL}</p>
-                    <div style="margin-top: 15px;">
-                        <button class="status-check-link" onclick="retryProxyConnection()" style="cursor: pointer; margin: 5px;">
-                            🔄 Retry Connection
-                        </button>
-                        <button class="status-check-link" onclick="useFallbackData()" style="cursor: pointer; margin: 5px; background: rgba(111, 66, 193, 0.6);">
-                            📋 Use Fallback Data
-                        </button>
-                    </div>
-                </div>
-            `;
-            apiErrorContainer.style.display = 'block';
-        }
-        
-        return null;
-    }
-}
-
-// Use fallback data
-function useFallbackData() {
-    const apiErrorContainer = document.getElementById('apiErrorContainer');
-    if (apiErrorContainer) {
-        apiErrorContainer.style.display = 'none';
-    }
-    
-    // Initialize with fallback data
-    Object.entries(fallbackStatusData).forEach(([executorName, status]) => {
-        UpdateStatus[executorName] = status.updated ? 'Updated' : 'Not Updated';
-        DetectStatus[executorName] = status.detected ? 'Detected' : 'Undetected';
-    });
-    
-    saveStatuses();
-    updateStatusIndicators();
-    
-    const apiStatusElement = document.getElementById('apiStatus');
-    if (apiStatusElement) {
-        apiStatusElement.textContent = '📋 Using Fallback Data';
-        apiStatusElement.style.color = '#ffd966';
-    }
-}
-
-// Process proxy data
-function processProxyData(proxyData) {
-    if (!proxyData) {
-        useFallbackData();
-        return;
-    }
-
-    UpdateStatus = {};
-    DetectStatus = {};
-
-    Object.entries(executorNameMapping).forEach(([ourName, apiName]) => {
-        const executorData = proxyData.find(exp => 
-            exp.name && exp.name.toLowerCase() === apiName.toLowerCase()
-        );
-        
-        if (executorData) {
-            UpdateStatus[ourName] = executorData.updated ? 'Updated' : 'Not Updated';
-            DetectStatus[ourName] = executorData.detected ? 'Detected' : 'Undetected';
-        } else {
-            UpdateStatus[ourName] = 'Unknown';
-            DetectStatus[ourName] = 'Unknown';
-        }
-    });
-
-    saveStatuses();
-    updateStatusIndicators();
-}
-
-// Initialize proxy status
-async function initializeProxyStatus() {
-    const proxyData = await fetchWEAOStatus();
-    processProxyData(proxyData);
-
-    // Periodic updates every 10 minutes
-    setInterval(async () => {
-        const proxyData = await fetchWEAOStatus();
-        processProxyData(proxyData);
-    }, 10 * 60 * 1000);
-}
-
-// Retry proxy connection
-async function retryProxyConnection() {
-    const apiErrorContainer = document.getElementById('apiErrorContainer');
-    if (apiErrorContainer) {
-        apiErrorContainer.style.display = 'none';
-    }
-    
-    const proxyData = await fetchWEAOStatus();
-    processProxyData(proxyData);
-}
-
-        // Manual status update function
-        function updateManualStatus() {
-            const executorSelect = document.getElementById('executorSelect');
-            const updateStatusSelect = document.getElementById('updateStatusSelect');
-            const detectStatusSelect = document.getElementById('detectStatusSelect');
-            
-            const executor = executorSelect.value;
-            const updateStatus = updateStatusSelect.value;
-            const detectStatus = detectStatusSelect.value;
-            
-            if (!executor) {
-                alert('Please select an executor');
-                return;
-            }
-            
-            UpdateStatus[executor] = updateStatus;
-            DetectStatus[executor] = detectStatus;
-            
-            saveStatuses();
-            updateStatusIndicators();
-            
-            // Show success message
-            alert(`Status updated for ${executor}`);
-            
-            // Reset selects
-            executorSelect.value = '';
-            updateStatusSelect.value = 'Updated';
-            detectStatusSelect.value = 'Undetected';
-        }
-
-        // ==================== STATUS INDICATORS ====================
-        function createStatusIndicator(type, status) {
-            const indicator = document.createElement('div');
-            
-            if (type === 'update') {
-                if (status === 'Updated') {
-                    indicator.className = 'status-indicator status-updated';
-                    indicator.textContent = 'Updated';
-                } else if (status === 'Not Updated') {
-                    indicator.className = 'status-indicator status-not-updated';
-                    indicator.textContent = 'Not Updated';
-                } else if (status === 'Unknown') {
-                    indicator.className = 'status-indicator status-unknown-update';
-                    indicator.textContent = 'Unknown';
-                } else {
-                    indicator.className = 'status-indicator status-unknown-update';
-                    indicator.textContent = 'Unknown';
-                }
-            } else {
-                if (status === 'Detected') {
-                    indicator.className = 'status-indicator status-detected';
-                    indicator.textContent = 'Detected';
-                } else if (status === 'Undetected') {
-                    indicator.className = 'status-indicator status-undetected';
-                    indicator.textContent = 'Undetected';
-                } else if (status === 'Unknown') {
-                    indicator.className = 'status-indicator status-unknown-update';
-                    indicator.textContent = 'Unknown';
-                } else {
-                    indicator.className = 'status-indicator status-undetected';
-                    indicator.textContent = 'Undetected';
-                }
-            }
-            
-            return indicator;
-        }
-
-        function updateStatusIndicators() {
-            for (const [executerName, updateStatus] of Object.entries(UpdateStatus)) {
-                const statusContainer = document.getElementById(`status-${executerName}`);
-                if (statusContainer) {
-                    statusContainer.innerHTML = '';
-                    
-                    const updateIndicator = createStatusIndicator('update', updateStatus);
-                    statusContainer.appendChild(updateIndicator);
-                    
-                    const detectStatus = DetectStatus[executerName];
-                    if (detectStatus) {
-                        const detectIndicator = createStatusIndicator('detect', detectStatus);
-                        statusContainer.appendChild(detectIndicator);
-                    }
-                }
-            }
-        }
-
-        // ==================== MODAL FUNCTIONS ====================
         function showScriptModal(scriptName) {
             const modal = document.getElementById('scriptModal');
             const modalTitle = document.getElementById('scriptModalTitle');
@@ -2146,6 +2106,86 @@ async function retryProxyConnection() {
             }
         }
 
+        function createStatusIndicator(type, status) {
+            const indicator = document.createElement('div');
+            
+            if (type === 'update') {
+                if (status === 'Updated') {
+                    indicator.className = 'status-indicator status-updated';
+                    indicator.textContent = 'Updated';
+                } else if (status === 'Not Updated') {
+                    indicator.className = 'status-indicator status-not-updated';
+                    indicator.textContent = 'Not Updated';
+                } else if (status === 'Unknown') {
+                    indicator.className = 'status-indicator status-unknown-update';
+                    indicator.textContent = 'Unknown';
+                } else {
+                    indicator.className = 'status-indicator status-unknown-update';
+                    indicator.textContent = 'Unknown';
+                }
+            } else {
+                if (status === 'Detected') {
+                    indicator.className = 'status-indicator status-detected';
+                    indicator.textContent = 'Detected';
+                } else if (status === 'Undetected') {
+                    indicator.className = 'status-indicator status-undetected';
+                    indicator.textContent = 'Undetected';
+                } else if (status === 'Unknown') {
+                    indicator.className = 'status-indicator status-unknown-update';
+                    indicator.textContent = 'Unknown';
+                } else {
+                    indicator.className = 'status-indicator status-undetected';
+                    indicator.textContent = 'Undetected';
+                }
+            }
+            
+            return indicator;
+        }
+
+        function initializeStatuses() {
+            for (const [executerName, updateStatus] of Object.entries(UpdateStatus)) {
+                const statusContainer = document.getElementById(`status-${executerName}`);
+                if (statusContainer) {
+                    statusContainer.innerHTML = '';
+                    
+                    const updateIndicator = createStatusIndicator('update', updateStatus);
+                    statusContainer.appendChild(updateIndicator);
+                    
+                    const detectStatus = DetectStatus[executerName];
+                    if (detectStatus) {
+                        const detectIndicator = createStatusIndicator('detect', detectStatus);
+                        statusContainer.appendChild(detectIndicator);
+                    }
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeStatuses);
+
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                
+                button.classList.add('active');
+                
+                const tabId = button.getAttribute('data-tab') + '-tab';
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.platform-tab').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.platform-tab').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.platform-content').forEach(content => content.classList.remove('active'));
+                
+                button.classList.add('active');
+                
+                const platformId = button.getAttribute('data-platform') + '-content';
+                document.getElementById(platformId).classList.add('active');
+            });
+        });
+
         function showExecuterInfo(executerName, price, website) {
             const modal = document.getElementById('executerModal');
             const modalTitle = document.getElementById('executerModalTitle');
@@ -2154,7 +2194,7 @@ async function retryProxyConnection() {
             modalTitle.textContent = `${executerName} Info`;
             
             const updateStatus = UpdateStatus[executerName] || 'Unknown';
-            const detectStatus = DetectStatus[executerName] || 'Unknown';
+            const detectStatus = DetectStatus[executerName] || 'Detected';
             
             modalContent.innerHTML = `
                 <div class="executer-details">
@@ -2178,25 +2218,20 @@ async function retryProxyConnection() {
                         <span class="detail-label">Website:</span>
                         <span class="detail-value">${website.replace('https://', '')}</span>
                     </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Data Source:</span>
-                        <span class="detail-value">WispByte Proxy + Local Cache</span>
-                    </div>
                 </div>
                 
                 <a href="${website}" class="website-link" target="_blank">Official Website</a>
                 
                 <div class="status-check-notice" style="margin-top: 20px;">
-                    <h3>🔍 Status Information</h3>
-                    <p>Connected to: <code>${PROXY_BASE_URL}</code></p>
-                    <p>Last updated: <span id="lastUpdatedTime">${new Date().toLocaleTimeString()}</span></p>
-                    <p style="font-size: 0.9rem; opacity: 0.8;">
-                        Statuses are automatically updated from WispByte Proxy every 10 minutes.
-                    </p>
+                    <h3>🔍 Important Notice</h3>
+                    <p>Statuses are not updated automatically and may not be accurate. Always check <strong>weao.xyz</strong> for accurate and current executor statuses.</p>
+                    <a href="https://weao.xyz/" class="status-check-link" target="_blank">
+                        📊 Check accurate statuses on weao.xyz
+                    </a>
                 </div>
                 
                 <p style="margin-top: 20px; opacity: 0.8; font-size: 0.9rem; color: #c0c0c0;">
-                    For the most current status, always check the official website or weao.xyz.
+                    We do not track executor update statuses automatically. Always check the official website for current status.
                 </p>
             `;
             
@@ -2215,40 +2250,6 @@ async function retryProxyConnection() {
             }, 300);
         }
 
-        // ==================== EVENT LISTENERS ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load statuses and initialize proxy
-            loadStatuses();
-            initializeProxyStatus();
-
-            // Tab functionality
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                    
-                    button.classList.add('active');
-                    
-                    const tabId = button.getAttribute('data-tab') + '-tab';
-                    document.getElementById(tabId).classList.add('active');
-                });
-            });
-
-            // Platform tab functionality
-            document.querySelectorAll('.platform-tab').forEach(button => {
-                button.addEventListener('click', () => {
-                    document.querySelectorAll('.platform-tab').forEach(btn => btn.classList.remove('active'));
-                    document.querySelectorAll('.platform-content').forEach(content => content.classList.remove('active'));
-                    
-                    button.classList.add('active');
-                    
-                    const platformId = button.getAttribute('data-platform') + '-content';
-                    document.getElementById(platformId).classList.add('active');
-                });
-            });
-        });
-
-        // Close modals when clicking outside
         window.onclick = function(event) {
             const executerModal = document.getElementById('executerModal');
             const scriptModal = document.getElementById('scriptModal');
