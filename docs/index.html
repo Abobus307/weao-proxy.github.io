@@ -1760,6 +1760,7 @@
     </div>
 
     <script>
+        // Список инжекторов для отображения (другие будут игнорироваться)
         const allowedInjectors = [
             "Volcano", "Velocity", "Wave", "Seliware", "Swift", "Valex",
             "Potassium", "Bunni.lol", "Sirhurt", "Hydrogen", "Macsploit",
@@ -1767,51 +1768,55 @@
             "ChocoSploit"
         ];
 
+        // API URL для получения статусов
         const API_URL = 'https://weao-proxy-c8hhzujes-2s-projects-5e8ea297.vercel.app/api/exploits';
 
+        // Объекты для хранения статусов
         let UpdateStatus = {};
         let DetectStatus = {};
 
+        // Получение статусов с API
         async function fetchStatusesFromAPI() {
-    try {
-        const response = await fetch(API_URL, {
-            // Добавляем режим CORS и заголовки
-            mode: "cors",
-            headers: {
-                "Accept": "application/json"
+            try {
+                const response = await fetch(API_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Обрабатываем данные API
+                processAPIStatuses(data);
+                
+                // Обновляем время последнего обновления
+                const lastUpdateElement = document.getElementById('lastUpdate');
+                const now = new Date();
+                lastUpdateElement.textContent = `Last update: ${now.toLocaleTimeString()}`;
+                
+                console.log('Статусы успешно обновлены с API');
+                
+            } catch (error) {
+                console.error('Ошибка при загрузке статусов:', error);
+                
+                // Устанавливаем статусы по умолчанию при ошибке
+                setDefaultStatuses();
+                
+                const lastUpdateElement = document.getElementById('lastUpdate');
+                lastUpdateElement.textContent = `Last update: Failed to load - ${new Date().toLocaleTimeString()}`;
+                lastUpdateElement.style.color = '#ff6b7a';
             }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Ошибка запроса: ${response.status}`);
         }
 
-        const data = await response.json();
-        processAPIStatuses(data);
-
-        const lastUpdateElement = document.getElementById('lastUpdate');
-        const now = new Date();
-        lastUpdateElement.textContent = `Last update: ${now.toLocaleTimeString()}`;
-        lastUpdateElement.style.color = '';
-
-        console.log('Статусы успешно обновлены с API');
-    } catch (error) {
-        console.error('Ошибка при загрузке статусов:', error);
-
-        setDefaultStatuses();
-
-        const lastUpdateElement = document.getElementById('lastUpdate');
-        lastUpdateElement.textContent = `Last update: Failed to load - ${new Date().toLocaleTimeString()}`;
-        lastUpdateElement.style.color = '#ff6b7a';
-    }
-}
-
-
+        // Обработка данных с API
         function processAPIStatuses(apiData) {
+            // Очищаем статусы перед обновлением
             UpdateStatus = {};
             DetectStatus = {};
             
+            // Обрабатываем данные в зависимости от формата API
             if (Array.isArray(apiData)) {
+                // Если API возвращает массив
                 apiData.forEach(item => {
                     const injectorName = item.name || item.injector || item.title;
                     if (injectorName && allowedInjectors.includes(injectorName)) {
@@ -1820,6 +1825,7 @@
                     }
                 });
             } else if (typeof apiData === 'object') {
+                // Если API возвращает объект
                 Object.keys(apiData).forEach(key => {
                     const injectorName = key;
                     if (allowedInjectors.includes(injectorName)) {
@@ -1830,6 +1836,7 @@
                 });
             }
             
+            // Устанавливаем статусы по умолчанию для инжекторов, которых нет в API
             allowedInjectors.forEach(injectorName => {
                 if (!UpdateStatus[injectorName]) {
                     UpdateStatus[injectorName] = "Unknown";
@@ -1839,9 +1846,11 @@
                 }
             });
             
+            // Обновляем отображение всех статусов
             initializeStatuses();
         }
 
+        // Установка статусов по умолчанию при ошибке загрузки
         function setDefaultStatuses() {
             allowedInjectors.forEach(injectorName => {
                 UpdateStatus[injectorName] = "Unknown";
@@ -1850,7 +1859,8 @@
             
             initializeStatuses();
         }
-        
+
+        // Обновление отображения статуса
         function updateStatusDisplay(injectorName) {
             const statusContainer = document.getElementById(`status-${injectorName}`);
             if (!statusContainer) return;
@@ -1867,12 +1877,15 @@
             statusContainer.appendChild(detectIndicator);
         }
 
+        // Инициализация всех статусов
         function initializeStatuses() {
+            // Инициализируем статусы для каждого разрешенного инжектора
             allowedInjectors.forEach(injectorName => {
                 updateStatusDisplay(injectorName);
             });
         }
 
+        // Создание индикатора статуса
         function createStatusIndicator(type, status) {
             const indicator = document.createElement('div');
             indicator.className = 'status-indicator';
@@ -1907,11 +1920,15 @@
             return indicator;
         }
 
+        // Инициализация при загрузке страницы
         document.addEventListener('DOMContentLoaded', function() {
+            // Загружаем статусы с API при загрузке страницы
             fetchStatusesFromAPI();
             
+            // Обновляем статусы каждые 5 минут
             setInterval(fetchStatusesFromAPI, 5 * 60 * 1000);
             
+            // Инициализируем остальные компоненты
             resizeCanvas();
             animateParticles();
             createFloatingParticles();
@@ -1919,6 +1936,7 @@
             handleScrollAnimations();
         });
 
+        // Остальной код без изменений...
         const canvas = document.getElementById('animated-bg');
         const ctx = canvas.getContext('2d');
         let particles = [];
