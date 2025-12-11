@@ -940,39 +940,39 @@
         }
 
         .status-updated {
-            background: rgba(40, 167, 69, 0.3);
-            color: #6bff8d;
-            border: 1px solid rgba(40, 167, 69, 0.5);
+            background: rgba(40, 167, 69, 0.25);
+            color: #4caf50;
+            border: 1px solid rgba(40, 167, 69, 0.7);
         }
 
         .status-not-updated {
-            background: rgba(220, 53, 69, 0.3);
-            color: #ff6b7a;
-            border: 1px solid rgba(220, 53, 69, 0.5);
+            background: rgba(220, 53, 69, 0.25);
+            color: #ff4d4f;
+            border: 1px solid rgba(220, 53, 69, 0.7);
         }
 
         .status-unknown-update {
-            background: rgba(108, 117, 125, 0.3);
+            background: rgba(108, 117, 125, 0.25);
             color: #b8c2cc;
-            border: 1px solid rgba(108, 117, 125, 0.5);
+            border: 1px solid rgba(108, 117, 125, 0.7);
         }
 
         .status-detected {
-            background: rgba(220, 53, 69, 0.3);
-            color: #ff6b7a;
-            border: 1px solid rgba(220, 53, 69, 0.5);
+            background: rgba(255, 193, 7, 0.25);
+            color: #ffd966;
+            border: 1px solid rgba(255, 193, 7, 0.7);
         }
 
         .status-undetected {
-            background: rgba(40, 167, 69, 0.3);
-            color: #6bff8d;
-            border: 1px solid rgba(40, 167, 69, 0.5);
+            background: rgba(111, 66, 193, 0.25);
+            color: #d0b3ff;
+            border: 1px solid rgba(111, 66, 193, 0.7);
         }
 
         .status-testing {
-            background: rgba(255, 193, 7, 0.3);
-            color: #ffd966;
-            border: 1px solid rgba(255, 193, 7, 0.5);
+            background: rgba(0, 123, 255, 0.25);
+            color: #82c4ff;
+            border: 1px solid rgba(0, 123, 255, 0.7);
         }
 
         .script-modal-buttons {
@@ -1760,7 +1760,6 @@
     </div>
 
     <script>
-    // Список инжекторов для отображения (другие будут игнорироваться)
     const allowedInjectors = [
         "Volcano", "Velocity", "Wave", "Seliware", "Swift", "Valex",
         "Potassium", "Bunni.lol", "Sirhurt", "Hydrogen", "Macsploit",
@@ -1768,61 +1767,46 @@
         "ChocoSploit"
     ];
 
-    // API URL для получения статусов
-    const API_URL = 'https://weao-proxy-api.vercel.app/api/status/exploits';
+    const API_URL = "https://weao-proxy-api.vercel.app/api/status/exploits";
 
-    // Объекты для хранения статусов
     let UpdateStatus = {};
     let DetectStatus = {};
 
-    // Получение статусов с API
     async function fetchStatusesFromAPI() {
         try {
             const response = await fetch(API_URL, {
-                method: 'GET',
-                mode: 'cors',
+                method: "GET",
+                mode: "cors",
                 headers: {
-                    'Accept': 'application/json'
+                    Accept: "application/json"
                 }
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const data = await response.json();
-            
-            // Обрабатываем данные API
             processAPIStatuses(data);
-            
-            // Обновляем время последнего обновления
-            const lastUpdateElement = document.getElementById('lastUpdate');
+
+            const lastUpdateElement = document.getElementById("lastUpdate");
             const now = new Date();
             lastUpdateElement.textContent = `Last update: ${now.toLocaleTimeString()}`;
-            
-            console.log('Статусы успешно обновлены с API');
-            
+            lastUpdateElement.style.color = "";
         } catch (error) {
-            console.error('Ошибка при загрузке статусов:', error);
-            
-            // Устанавливаем статусы по умолчанию при ошибке
+            console.error("Ошибка при загрузке статусов:", error);
             setDefaultStatuses();
-            
-            const lastUpdateElement = document.getElementById('lastUpdate');
+            const lastUpdateElement = document.getElementById("lastUpdate");
             lastUpdateElement.textContent = `Last update: Failed to load - ${new Date().toLocaleTimeString()}`;
-            lastUpdateElement.style.color = '#ff6b7a';
+            lastUpdateElement.style.color = "#ff6b7a";
         }
     }
 
-    // Обработка данных с API
     function processAPIStatuses(apiData) {
-        // Очищаем статусы перед обновлением
         UpdateStatus = {};
         DetectStatus = {};
-        
-        // Обрабатываем данные в зависимости от формата API
+
         if (Array.isArray(apiData)) {
-            // Если API возвращает массив
             apiData.forEach(item => {
                 const injectorName = item.name || item.injector || item.title;
                 if (injectorName && allowedInjectors.includes(injectorName)) {
@@ -1830,8 +1814,7 @@
                     DetectStatus[injectorName] = item.detectStatus || item.detected || "Unknown";
                 }
             });
-        } else if (typeof apiData === 'object') {
-            // Если API возвращает объект
+        } else if (typeof apiData === "object" && apiData !== null) {
             Object.keys(apiData).forEach(key => {
                 const injectorName = key;
                 if (allowedInjectors.includes(injectorName)) {
@@ -1841,8 +1824,7 @@
                 }
             });
         }
-        
-        // Устанавливаем статусы по умолчанию для инжекторов, которых нет в API
+
         allowedInjectors.forEach(injectorName => {
             if (!UpdateStatus[injectorName]) {
                 UpdateStatus[injectorName] = "Unknown";
@@ -1851,90 +1833,82 @@
                 DetectStatus[injectorName] = "Unknown";
             }
         });
-        
-        // Обновляем отображение всех статусов
+
         initializeStatuses();
     }
 
-    // Установка статусов по умолчанию при ошибке загрузки
     function setDefaultStatuses() {
         allowedInjectors.forEach(injectorName => {
             UpdateStatus[injectorName] = "Unknown";
             DetectStatus[injectorName] = "Unknown";
         });
-        
         initializeStatuses();
     }
 
-    // Обновление отображения статуса
     function updateStatusDisplay(injectorName) {
         const statusContainer = document.getElementById(`status-${injectorName}`);
         if (!statusContainer) return;
-        
-        statusContainer.innerHTML = '';
-        
+
+        statusContainer.innerHTML = "";
+
         const updateStatus = UpdateStatus[injectorName] || "Unknown";
         const detectStatus = DetectStatus[injectorName] || "Unknown";
-        
-        const updateIndicator = createStatusIndicator('update', updateStatus);
-        const detectIndicator = createStatusIndicator('detect', detectStatus);
-        
+
+        const updateIndicator = createStatusIndicator("update", updateStatus);
+        const detectIndicator = createStatusIndicator("detect", detectStatus);
+
         statusContainer.appendChild(updateIndicator);
         statusContainer.appendChild(detectIndicator);
     }
 
-    // Инициализация всех статусов
     function initializeStatuses() {
-        // Инициализируем статусы для каждого разрешенного инжектора
         allowedInjectors.forEach(injectorName => {
             updateStatusDisplay(injectorName);
         });
     }
 
-    // Создание индикатора статуса
     function createStatusIndicator(type, status) {
-        const indicator = document.createElement('div');
-        indicator.className = 'status-indicator';
-        
-        if (type === 'update') {
-            if (status === 'Updated' || status === 'updated') {
-                indicator.className = 'status-indicator status-updated';
-                indicator.textContent = 'Updated';
-            } else if (status === 'Not Updated' || status === 'not_updated' || status === 'not updated') {
-                indicator.className = 'status-indicator status-not-updated';
-                indicator.textContent = 'Not Updated';
+        const indicator = document.createElement("div");
+        indicator.className = "status-indicator";
+
+        if (type === "update") {
+            if (status === "Updated" || status === "updated") {
+                indicator.className = "status-indicator status-updated";
+                indicator.textContent = "Updated";
+            } else if (
+                status === "Not Updated" ||
+                status === "not_updated" ||
+                status === "not updated"
+            ) {
+                indicator.className = "status-indicator status-not-updated";
+                indicator.textContent = "Not Updated";
             } else {
-                indicator.className = 'status-indicator status-unknown-update';
-                indicator.textContent = status || 'Unknown';
+                indicator.className = "status-indicator status-unknown-update";
+                indicator.textContent = status || "Unknown";
             }
         } else {
-            if (status === 'Detected' || status === 'detected') {
-                indicator.className = 'status-indicator status-detected';
-                indicator.textContent = 'Detected';
-            } else if (status === 'Undetected' || status === 'undetected') {
-                indicator.className = 'status-indicator status-undetected';
-                indicator.textContent = 'Undetected';
-            } else if (status === 'Testing' || status === 'testing') {
-                indicator.className = 'status-indicator status-testing';
-                indicator.textContent = 'Testing';
+            if (status === "Detected" || status === "detected") {
+                indicator.className = "status-indicator status-detected";
+                indicator.textContent = "Detected";
+            } else if (status === "Undetected" || status === "undetected") {
+                indicator.className = "status-indicator status-undetected";
+                indicator.textContent = "Undetected";
+            } else if (status === "Testing" || status === "testing") {
+                indicator.className = "status-indicator status-testing";
+                indicator.textContent = "Testing";
             } else {
-                indicator.className = 'status-indicator status-unknown-update';
-                indicator.textContent = status || 'Unknown';
+                indicator.className = "status-indicator status-unknown-update";
+                indicator.textContent = status || "Unknown";
             }
         }
-        
+
         return indicator;
     }
 
-    // Инициализация при загрузке страницы
-    document.addEventListener('DOMContentLoaded', function() {
-        // Загружаем статусы с API при загрузке страницы
+    document.addEventListener("DOMContentLoaded", function () {
         fetchStatusesFromAPI();
-        
-        // Обновляем статусы каждые 5 минут
         setInterval(fetchStatusesFromAPI, 5 * 60 * 1000);
-        
-        // Инициализируем остальные компоненты
+
         resizeCanvas();
         animateParticles();
         createFloatingParticles();
@@ -1942,213 +1916,216 @@
         handleScrollAnimations();
     });
 
-        // Остальной код без изменений...
-        const canvas = document.getElementById('animated-bg');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let mouse = { x: null, y: null, radius: 150 };
+    const canvas = document.getElementById("animated-bg");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+    let mouse = { x: null, y: null, radius: 150 };
 
-        let hideInjectorStatuses = false;
-        let technicalIssues = false;
+    let hideInjectorStatuses = false;
+    let technicalIssues = false;
 
-        const scriptData = {
-            "Universal Gui": {
-                code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Rx1m/CpsHub/refs/heads/main/CPSNetwork",true))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            },
-            "Touch Football Script": {
-                code: 'loadstring(game:HttpGet("https://gist.githubusercontent.com/aquzeh/8e317c91305a2311bb9931c2b79c15b2/raw/cpstfb"))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            },
-            "PVB Script": {
-                code: 'loadstring(game:HttpGet("https://gist.githubusercontent.com/aquzeh/86b881d600cd8f7fdd007469e4a45965/raw/pvb"))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            },
-            "99 Nights Hub": {
-                code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Rx1m/CpsHub/refs/heads/main/Hub",true))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            },
-            "99 Nights AutoFarm": {
-                code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Rx1m/CpsHub/refs/heads/main/DayFarm%E2%84%A2",true))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            },
-            "TSB Auto Block": {
-                code: 'loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/6f502e252308fb97855295005faa73a0.lua"))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            },
-            "TSB Auto Techs": {
-                code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/hellattexyss/autotechs/refs/heads/main/cpstechs.lua"))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            },
-            "Dead Rails Script": {
-                code: 'loadstring(game:HttpGet("https://api.getpolsec.com/scripts/files/8296210a2f042b36145c0db05bd725f73dcf465e2cd54e02ee843c6578a40a91.lua"))()',
-                discordLink: 'https://discord.gg/uCq6dNAfRV'
-            }
-        };
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            initParticles();
+    const scriptData = {
+        "Universal Gui": {
+            code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Rx1m/CpsHub/refs/heads/main/CPSNetwork",true))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
+        },
+        "Touch Football Script": {
+            code: 'loadstring(game:HttpGet("https://gist.githubusercontent.com/aquzeh/8e317c91305a2311bb9931c2b79c15b2/raw/cpstfb"))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
+        },
+        "PVB Script": {
+            code: 'loadstring(game:HttpGet("https://gist.githubusercontent.com/aquzeh/86b881d600cd8f7fdd007469e4a45965/raw/pvb"))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
+        },
+        "99 Nights Hub": {
+            code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Rx1m/CpsHub/refs/heads/main/Hub",true))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
+        },
+        "99 Nights AutoFarm": {
+            code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/Rx1m/CpsHub/refs/heads/main/DayFarm%E2%84%A2",true))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
+        },
+        "TSB Auto Block": {
+            code: 'loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/6f502e252308fb97855295005faa73a0.lua"))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
+        },
+        "TSB Auto Techs": {
+            code: 'loadstring(game:HttpGet("https://raw.githubusercontent.com/hellattexyss/autotechs/refs/heads/main/cpstechs.lua"))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
+        },
+        "Dead Rails Script": {
+            code: 'loadstring(game:HttpGet("https://api.getpolsec.com/scripts/files/8296210a2f042b36145c0db05bd725f73dcf465e2cd54e02ee843c6578a40a91.lua"))()',
+            discordLink: "https://discord.gg/uCq6dNAfRV"
         }
+    };
 
-        function initParticles() {
-            particles = [];
-            const particleCount = Math.min(100, Math.floor((canvas.width * canvas.height) / 10000));
-            
-            for (let i = 0; i < particleCount; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    size: Math.random() * 3 + 1,
-                    speedX: Math.random() * 1 - 0.5,
-                    speedY: Math.random() * 1 - 0.5,
-                    color: `rgba(${Math.random() > 0.5 ? '179, 142, 93' : '168, 107, 107'}, ${Math.random() * 0.3 + 0.2})`
-                });
-            }
-        }
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        initParticles();
+    }
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            particles.forEach(particle => {
-                particle.x += particle.speedX;
-                particle.y += particle.speedY;
-                
-                if (particle.x > canvas.width || particle.x < 0) particle.speedX = -particle.speedX;
-                if (particle.y > canvas.height || particle.y < 0) particle.speedY = -particle.speedY;
-                
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                ctx.fillStyle = particle.color;
-                ctx.fill();
-                
-                particles.forEach(otherParticle => {
-                    const dx = particle.x - otherParticle.x;
-                    const dy = particle.y - otherParticle.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(179, 142, 93, ${0.1 * (1 - distance/100)})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particle.x, particle.y);
-                        ctx.lineTo(otherParticle.x, otherParticle.y);
-                        ctx.stroke();
-                    }
-                });
-                
-                if (mouse.x !== null && mouse.y !== null) {
-                    const dx = mouse.x - particle.x;
-                    const dy = mouse.y - particle.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    if (distance < mouse.radius) {
-                        const force = (mouse.radius - distance) / mouse.radius;
-                        const forceX = dx / distance * force * 10;
-                        const forceY = dy / distance * force * 10;
-                        
-                        particle.x -= forceX;
-                        particle.y -= forceY;
-                    }
-                }
-            });
-            
-            requestAnimationFrame(animateParticles);
-        }
+    function initParticles() {
+        particles = [];
+        const particleCount = Math.min(100, Math.floor((canvas.width * canvas.height) / 10000));
 
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.x;
-            mouse.y = e.y;
-        });
-
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        window.addEventListener('resize', resizeCanvas);
-
-        function createFloatingParticles() {
-            const particleCount = 20;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'floating-particle';
-                
-                const size = Math.random() * 3 + 1;
-                const startX = Math.random() * 100;
-                const duration = Math.random() * 20 + 10;
-                const delay = Math.random() * 5;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${startX}vw`;
-                particle.style.bottom = '0';
-                particle.style.opacity = Math.random() * 0.3 + 0.1;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.setProperty('--dx', (Math.random() * 2 - 1).toFixed(2));
-                
-                const colors = [
-                    'rgba(179, 142, 93, 0.3)',
-                    'rgba(168, 107, 107, 0.3)',
-                    'rgba(111, 66, 193, 0.2)',
-                    'rgba(40, 167, 69, 0.2)'
-                ];
-                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-                
-                document.body.appendChild(particle);
-                
-                setTimeout(() => {
-                    particle.remove();
-                }, (duration + delay) * 1000);
-            }
-            
-            setTimeout(createFloatingParticles, 2000);
-        }
-
-        function handleScrollAnimations() {
-            const elements = document.querySelectorAll('.slide-in');
-            
-            elements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-                
-                if (elementTop < window.innerHeight - elementVisible) {
-                    element.classList.add('slide-in');
-                }
+        for (let i = 0; i < particleCount; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 1,
+                speedX: Math.random() * 1 - 0.5,
+                speedY: Math.random() * 1 - 0.5,
+                color: `rgba(${
+                    Math.random() > 0.5 ? "179, 142, 93" : "168, 107, 107"
+                }, ${Math.random() * 0.3 + 0.2})`
             });
         }
+    }
 
-        document.querySelectorAll('.plan, .perk-card, .feature-card, .executer-card, .changelog-item').forEach(el => {
-            el.classList.add('slide-in');
+    function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(particle => {
+            particle.x += particle.speedX;
+            particle.y += particle.speedY;
+
+            if (particle.x > canvas.width || particle.x < 0) particle.speedX = -particle.speedX;
+            if (particle.y > canvas.height || particle.y < 0) particle.speedY = -particle.speedY;
+
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+            ctx.fillStyle = particle.color;
+            ctx.fill();
+
+            particles.forEach(otherParticle => {
+                const dx = particle.x - otherParticle.x;
+                const dy = particle.y - otherParticle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < 100) {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(179, 142, 93, ${0.1 * (1 - distance / 100)})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.moveTo(particle.x, particle.y);
+                    ctx.lineTo(otherParticle.x, otherParticle.y);
+                    ctx.stroke();
+                }
+            });
+
+            if (mouse.x !== null && mouse.y !== null) {
+                const dx = mouse.x - particle.x;
+                const dy = mouse.y - particle.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < mouse.radius) {
+                    const force = (mouse.radius - distance) / mouse.radius;
+                    const forceX = (dx / distance) * force * 10;
+                    const forceY = (dy / distance) * force * 10;
+
+                    particle.x -= forceX;
+                    particle.y -= forceY;
+                }
+            }
         });
 
-        window.addEventListener('scroll', handleScrollAnimations);
-        handleScrollAnimations();
+        requestAnimationFrame(animateParticles);
+    }
 
-        function checkTechnicalIssues() {
-            if (technicalIssues) {
-                document.querySelector('.technical-issues').classList.add('active');
-                document.querySelector('.main-content').classList.add('hidden');
-            } else {
-                document.querySelector('.technical-issues').classList.remove('active');
-                document.querySelector('.main-content').classList.remove('hidden');
-            }
+    window.addEventListener("mousemove", e => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+
+    window.addEventListener("mouseout", () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    window.addEventListener("resize", resizeCanvas);
+
+    function createFloatingParticles() {
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement("div");
+            particle.className = "floating-particle";
+
+            const size = Math.random() * 3 + 1;
+            const startX = Math.random() * 100;
+            const duration = Math.random() * 20 + 10;
+            const delay = Math.random() * 5;
+
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${startX}vw`;
+            particle.style.bottom = "0";
+            particle.style.opacity = Math.random() * 0.3 + 0.1;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.setProperty("--dx", (Math.random() * 2 - 1).toFixed(2));
+
+            const colors = [
+                "rgba(179, 142, 93, 0.3)",
+                "rgba(168, 107, 107, 0.3)",
+                "rgba(111, 66, 193, 0.2)",
+                "rgba(40, 167, 69, 0.2)"
+            ];
+            particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            document.body.appendChild(particle);
+
+            setTimeout(() => {
+                particle.remove();
+            }, (duration + delay) * 1000);
         }
 
-        function showScriptModal(scriptName) {
-            const modal = document.getElementById('scriptModal');
-            const modalTitle = document.getElementById('scriptModalTitle');
-            const modalContent = document.getElementById('scriptModalContent');
-            
-            const scriptInfo = scriptData[scriptName];
-            if (!scriptInfo) return;
-            
-            modalTitle.textContent = `${scriptName} - Options`;
-            
-            modalContent.innerHTML = `
+        setTimeout(createFloatingParticles, 2000);
+    }
+
+    function handleScrollAnimations() {
+        const elements = document.querySelectorAll(".slide-in");
+
+        elements.forEach(element => {
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+
+            if (elementTop < window.innerHeight - elementVisible) {
+                element.classList.add("slide-in");
+            }
+        });
+    }
+
+    document
+        .querySelectorAll(".plan, .perk-card, .feature-card, .executer-card, .changelog-item")
+        .forEach(el => {
+            el.classList.add("slide-in");
+        });
+
+    window.addEventListener("scroll", handleScrollAnimations);
+    handleScrollAnimations();
+
+    function checkTechnicalIssues() {
+        if (technicalIssues) {
+            document.querySelector(".technical-issues").classList.add("active");
+            document.querySelector(".main-content").classList.add("hidden");
+        } else {
+            document.querySelector(".technical-issues").classList.remove("active");
+            document.querySelector(".main-content").classList.remove("hidden");
+        }
+    }
+
+    function showScriptModal(scriptName) {
+        const modal = document.getElementById("scriptModal");
+        const modalTitle = document.getElementById("scriptModalTitle");
+        const modalContent = document.getElementById("scriptModalContent");
+
+        const scriptInfo = scriptData[scriptName];
+        if (!scriptInfo) return;
+
+        modalTitle.textContent = `${scriptName} - Options`;
+
+        modalContent.innerHTML = `
                 <div class="script-modal-buttons">
                     <button class="script-modal-button copy" onclick="copyScriptCode('${scriptName}')">
                         📋 Get script now
@@ -2160,128 +2137,133 @@
                 <div class="script-code">${scriptInfo.code}</div>
                 <div class="copy-success" id="copySuccessMessage">✅ Script copied to clipboard!</div>
             `;
-            
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('active');
-            }, 10);
-        }
 
-        function showTSBModal() {
-            const modal = document.getElementById('tsbModal');
-            
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('active');
-            }, 10);
-        }
+        modal.style.display = "flex";
+        setTimeout(() => {
+            modal.classList.add("active");
+        }, 10);
+    }
 
-        function closeTSBModal() {
-            const modal = document.getElementById('tsbModal');
-            
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        }
+    function showTSBModal() {
+        const modal = document.getElementById("tsbModal");
 
-        function selectTSBScript(scriptType) {
-            closeTSBModal();
-            
-            const fullScriptName = `TSB ${scriptType}`;
-            showScriptModal(fullScriptName);
-        }
+        modal.style.display = "flex";
+        setTimeout(() => {
+            modal.classList.add("active");
+        }, 10);
+    }
 
-        function show99NightsModal() {
-            const modal = document.getElementById('nightsModal');
-            
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('active');
-            }, 10);
-        }
+    function closeTSBModal() {
+        const modal = document.getElementById("tsbModal");
 
-        function closeNightsModal() {
-            const modal = document.getElementById('nightsModal');
-            
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-        }
+        modal.classList.remove("active");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
+    }
 
-        function selectNightsScript(scriptType) {
-            closeNightsModal();
-            
-            const fullScriptName = `99 Nights ${scriptType}`;
-            showScriptModal(fullScriptName);
-        }
+    function selectTSBScript(scriptType) {
+        closeTSBModal();
 
-        function copyScriptCode(scriptName) {
-            const scriptCode = scriptData[scriptName].code;
-            
-            navigator.clipboard.writeText(scriptCode).then(() => {
-                const successMessage = document.getElementById('copySuccessMessage');
-                successMessage.classList.add('show');
-                
+        const fullScriptName = `TSB ${scriptType}`;
+        showScriptModal(fullScriptName);
+    }
+
+    function show99NightsModal() {
+        const modal = document.getElementById("nightsModal");
+
+        modal.style.display = "flex";
+        setTimeout(() => {
+            modal.classList.add("active");
+        }, 10);
+    }
+
+    function closeNightsModal() {
+        const modal = document.getElementById("nightsModal");
+
+        modal.classList.remove("active");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
+    }
+
+    function selectNightsScript(scriptType) {
+        closeNightsModal();
+
+        const fullScriptName = `99 Nights ${scriptType}`;
+        showScriptModal(fullScriptName);
+    }
+
+    function copyScriptCode(scriptName) {
+        const scriptCode = scriptData[scriptName].code;
+
+        navigator.clipboard
+            .writeText(scriptCode)
+            .then(() => {
+                const successMessage = document.getElementById("copySuccessMessage");
+                successMessage.classList.add("show");
+
                 setTimeout(() => {
-                    successMessage.classList.remove('show');
+                    successMessage.classList.remove("show");
                 }, 3000);
-            }).catch(err => {
-                console.error('Failed to copy script: ', err);
-                alert('Failed to copy script. Please copy manually.');
+            })
+            .catch(err => {
+                console.error("Failed to copy script: ", err);
+                alert("Failed to copy script. Please copy manually.");
             });
+    }
+
+    function closeScriptModal() {
+        const modal = document.getElementById("scriptModal");
+
+        modal.classList.remove("active");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
+
+        const successMessage = document.getElementById("copySuccessMessage");
+        if (successMessage) {
+            successMessage.classList.remove("show");
         }
+    }
 
-        function closeScriptModal() {
-            const modal = document.getElementById('scriptModal');
-            
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
-            
-            const successMessage = document.getElementById('copySuccessMessage');
-            if (successMessage) {
-                successMessage.classList.remove('show');
-            }
-        }
+    document.querySelectorAll(".tab-button").forEach(button => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+            document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
 
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-                
-                button.classList.add('active');
-                
-                const tabId = button.getAttribute('data-tab') + '-tab';
-                document.getElementById(tabId).classList.add('active');
-            });
+            button.classList.add("active");
+
+            const tabId = button.getAttribute("data-tab") + "-tab";
+            document.getElementById(tabId).classList.add("active");
         });
+    });
 
-        document.querySelectorAll('.platform-tab').forEach(button => {
-            button.addEventListener('click', () => {
-                document.querySelectorAll('.platform-tab').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.platform-content').forEach(content => content.classList.remove('active'));
-                
-                button.classList.add('active');
-                
-                const platformId = button.getAttribute('data-platform') + '-content';
-                document.getElementById(platformId).classList.add('active');
-            });
+    document.querySelectorAll(".platform-tab").forEach(button => {
+        button.addEventListener("click", () => {
+            document.querySelectorAll(".platform-tab").forEach(btn => btn.classList.remove("active"));
+            document
+                .querySelectorAll(".platform-content")
+                .forEach(content => content.classList.remove("active"));
+
+            button.classList.add("active");
+
+            const platformId = button.getAttribute("data-platform") + "-content";
+            document.getElementById(platformId).classList.add("active");
         });
+    });
 
-        function showExecuterInfo(executerName, price, website) {
-            const modal = document.getElementById('executerModal');
-            const modalTitle = document.getElementById('executerModalTitle');
-            const modalContent = document.getElementById('executerModalContent');
-            
-            modalTitle.textContent = `${executerName} Info`;
-            
-            const updateStatus = UpdateStatus[executerName] || 'Unknown';
-            const detectStatus = DetectStatus[executerName] || 'Unknown';
-            
-            modalContent.innerHTML = `
+    function showExecuterInfo(executerName, price, website) {
+        const modal = document.getElementById("executerModal");
+        const modalTitle = document.getElementById("executerModalTitle");
+        const modalContent = document.getElementById("executerModalContent");
+
+        modalTitle.textContent = `${executerName} Info`;
+
+        const updateStatus = UpdateStatus[executerName] || "Unknown";
+        const detectStatus = DetectStatus[executerName] || "Unknown";
+
+        modalContent.innerHTML = `
                 <div class="executer-details">
                     <div class="detail-row">
                         <span class="detail-label">Price:</span>
@@ -2290,18 +2272,18 @@
                     <div class="detail-row">
                         <span class="detail-label">Update Status:</span>
                         <span class="detail-value">
-                            ${createStatusIndicator('update', updateStatus).outerHTML}
+                            ${createStatusIndicator("update", updateStatus).outerHTML}
                         </span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Detect Status:</span>
                         <span class="detail-value">
-                            ${createStatusIndicator('detect', detectStatus).outerHTML}
+                            ${createStatusIndicator("detect", detectStatus).outerHTML}
                         </span>
                     </div>
                     <div class="detail-row">
                         <span class="detail-label">Website:</span>
-                        <span class="detail-value">${website.replace('https://', '')}</span>
+                        <span class="detail-value">${website.replace("https://", "")}</span>
                     </div>
                 </div>
                 
@@ -2314,44 +2296,42 @@
                     </p>
                 </div>
             `;
-            
-            modal.style.display = 'flex';
-            setTimeout(() => {
-                modal.classList.add('active');
-            }, 10);
+
+        modal.style.display = "flex";
+        setTimeout(() => {
+            modal.classList.add("active");
+        }, 10);
+    }
+
+    function closeExecuterModal() {
+        const modal = document.getElementById("executerModal");
+
+        modal.classList.remove("active");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
+    }
+
+    window.onclick = function (event) {
+        const executerModal = document.getElementById("executerModal");
+        const scriptModal = document.getElementById("scriptModal");
+        const tsbModal = document.getElementById("tsbModal");
+        const nightsModal = document.getElementById("nightsModal");
+
+        if (event.target === executerModal) {
+            closeExecuterModal();
         }
 
-        function closeExecuterModal() {
-            const modal = document.getElementById('executerModal');
-            
-            modal.classList.remove('active');
-            setTimeout(() => {
-                modal.style.display = 'none';
-            }, 300);
+        if (event.target === scriptModal) {
+            closeScriptModal();
         }
 
-        window.onclick = function(event) {
-            const executerModal = document.getElementById('executerModal');
-            const scriptModal = document.getElementById('scriptModal');
-            const tsbModal = document.getElementById('tsbModal');
-            const nightsModal = document.getElementById('nightsModal');
-            
-            if (event.target === executerModal) {
-                closeExecuterModal();
-            }
-            
-            if (event.target === scriptModal) {
-                closeScriptModal();
-            }
-            
-            if (event.target === tsbModal) {
-                closeTSBModal();
-            }
-            
-            if (event.target === nightsModal) {
-                closeNightsModal();
-            }
+        if (event.target === tsbModal) {
+            closeTSBModal();
         }
-    </script>
-</body>
-</html>
+
+        if (event.target === nightsModal) {
+            closeNightsModal();
+        }
+    };
+</script>
