@@ -1452,7 +1452,6 @@
                     <div class="api-status-info">
                         <h3>🌐 API Status Information</h3>
                         <p>Update statuses are loaded automatically from <strong>weao.xyz API</strong> in real-time.</p>
-                        <p>Detection statuses are manually configured and can be edited in the script code.</p>
                         <div class="last-update" id="lastUpdate">Last update: Loading...</div>
                     </div>
                     
@@ -1760,68 +1759,68 @@
 
     <script>
     const allowedInjectors = [
-        "Volcano", "Velocity", "Wave", "Seliware", "Swift", "Valex",
-        "Potassium", "Bunni.lol", "Sirhurt", "Hydrogen", "Macsploit",
-        "Codex", "Cryptic", "Cryptic-Android", "Delta", "Delta-iOS",
-        "ChocoSploit"
-    ];
+    "Volcano", "Velocity", "Wave", "Seliware", "Swift", "Valex",
+    "Potassium", "Bunni.lol", "Sirhurt", "Hydrogen", "Macsploit",
+    "Codex", "Cryptic", "Cryptic-Android", "Delta", "Delta-iOS",
+    "ChocoSploit"
+];
 
-    const manualDetectStatuses = {
-        "Volcano": "Undetected",
-        "Velocity": "Undetected",
-        "Wave": "Undetected",
-        "Seliware": "Undetected",
-        "Swift": "Detected",
-        "Valex": "Detected",
-        "Potassium": "Detected",
-        "Bunni.lol": "Undetected",
-        "Sirhurt": "Undetected",
-        "Hydrogen": "Undetected",
-        "Macsploit": "Undetected",
-        "Codex": "Detected",
-        "Cryptic": "Undetected",
-        "Cryptic-Android": "Undetected",
-        "Delta": "Undetected",
-        "Delta-iOS": "Undetected",
-        "ChocoSploit": "Undetected"
-    };
+const manualDetectStatuses = {
+    "Volcano": "Undetected",
+    "Velocity": "Detected",
+    "Wave": "Undetected",
+    "Seliware": "Undetected",
+    "Swift": "Unknown",
+    "Valex": "Undetected",
+    "Potassium": "Undetected",
+    "Bunni.lol": "Undetected",
+    "Sirhurt": "Undetected",
+    "Hydrogen": "Undetected",
+    "Macsploit": "Undetected",
+    "Codex": "Undetected",
+    "Cryptic": "Undetected",
+    "Cryptic-Android": "Undetected",
+    "Delta": "Undetected",
+    "Delta-iOS": "Undetected",
+    "ChocoSploit": "Undetected"
+};
 
-    const API_URL = "https://weao-proxy-api.vercel.app/api/status/exploits";
+const API_URL = "https://weao-proxy-api.vercel.app/api/status/exploits";
 
-    let UpdateStatus = {};
-    let DetectStatus = {};
+let UpdateStatus = {};
+let DetectStatus = {};
 
-    async function fetchStatusesFromAPI() {
-        try {
-            const response = await fetch(API_URL, {
-                method: "GET",
-                mode: "cors",
-                headers: {
-                    Accept: "application/json"
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+async function fetchStatusesFromAPI() {
+    try {
+        const response = await fetch(API_URL, {
+            method: "GET",
+            mode: "cors",
+            headers: {
+                Accept: "application/json"
             }
+        });
 
-            const data = await response.json();
-            processAPIStatuses(data);
-
-            const lastUpdateElement = document.getElementById("lastUpdate");
-            const now = new Date();
-            lastUpdateElement.textContent = `Last update: ${now.toLocaleTimeString()}`;
-            lastUpdateElement.style.color = "";
-        } catch (error) {
-            console.error("Error loading statuses:", error);
-            setDefaultStatuses();
-            const lastUpdateElement = document.getElementById("lastUpdate");
-            lastUpdateElement.textContent = `Last update: Failed to load - ${new Date().toLocaleTimeString()}`;
-            lastUpdateElement.style.color = "#ff6b7a";
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
         }
-    }
 
-   function processAPIStatuses(apiData) {
+        const data = await response.json();
+        processAPIStatuses(data);
+
+        const lastUpdateElement = document.getElementById("lastUpdate");
+        const now = new Date();
+        lastUpdateElement.textContent = `Last update: ${now.toLocaleTimeString()}`;
+        lastUpdateElement.style.color = "";
+    } catch (error) {
+        console.error("Error loading statuses:", error);
+        setDefaultStatuses();
+        const lastUpdateElement = document.getElementById("lastUpdate");
+        lastUpdateElement.textContent = `Last update: Failed to load - ${new Date().toLocaleTimeString()}`;
+        lastUpdateElement.style.color = "#ff6b7a";
+    }
+}
+
+function processAPIStatuses(apiData) {
     UpdateStatus = {};
     DetectStatus = {};
 
@@ -1880,93 +1879,93 @@
     }
 
     initializeStatuses();
-   }
+}
 
-    function setDefaultStatuses() {
-        allowedInjectors.forEach(injectorName => {
-            UpdateStatus[injectorName] = "Unknown";
-            DetectStatus[injectorName] = "Unknown";
-        });
-        
-        for (const [injectorName, detectStatus] of Object.entries(manualDetectStatuses)) {
-            if (allowedInjectors.includes(injectorName)) {
-                DetectStatus[injectorName] = detectStatus;
-            }
-        }
-        
-        initializeStatuses();
-    }
-
-    function updateStatusDisplay(injectorName) {
-        const statusContainer = document.getElementById(`status-${injectorName}`);
-        if (!statusContainer) return;
-
-        statusContainer.innerHTML = "";
-
-        const updateStatus = UpdateStatus[injectorName] || "Unknown";
-        const detectStatus = DetectStatus[injectorName] || "Unknown";
-
-        const updateIndicator = createStatusIndicator("update", updateStatus);
-        const detectIndicator = createStatusIndicator("detect", detectStatus);
-
-        statusContainer.appendChild(updateIndicator);
-        statusContainer.appendChild(detectIndicator);
-    }
-
-    function initializeStatuses() {
-        allowedInjectors.forEach(injectorName => {
-            updateStatusDisplay(injectorName);
-        });
-    }
-
-    function createStatusIndicator(type, status) {
-        const indicator = document.createElement("div");
-        indicator.className = "status-indicator";
-
-        if (type === "update") {
-            if (status === "Updated" || status === "updated") {
-                indicator.className = "status-indicator status-updated";
-                indicator.textContent = "Updated";
-            } else if (
-                status === "Not Updated" ||
-                status === "not_updated" ||
-                status === "not updated"
-            ) {
-                indicator.className = "status-indicator status-not-updated";
-                indicator.textContent = "Not Updated";
-            } else {
-                indicator.className = "status-indicator status-unknown-update";
-                indicator.textContent = status || "Unknown";
-            }
-        } else {
-            if (status === "Detected" || status === "detected") {
-                indicator.className = "status-indicator status-detected";
-                indicator.textContent = "Detected";
-            } else if (status === "Undetected" || status === "undetected") {
-                indicator.className = "status-indicator status-undetected";
-                indicator.textContent = "Undetected";
-            } else if (status === "Testing" || status === "testing") {
-                indicator.className = "status-indicator status-testing";
-                indicator.textContent = "Testing";
-            } else {
-                indicator.className = "status-indicator status-unknown-update";
-                indicator.textContent = status || "Unknown";
-            }
-        }
-
-        return indicator;
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        fetchStatusesFromAPI();
-        setInterval(fetchStatusesFromAPI, 5 * 60 * 1000);
-
-        resizeCanvas();
-        animateParticles();
-        createFloatingParticles();
-        checkTechnicalIssues();
-        handleScrollAnimations();
+function setDefaultStatuses() {
+    allowedInjectors.forEach(injectorName => {
+        UpdateStatus[injectorName] = "Unknown";
+        DetectStatus[injectorName] = "Unknown";
     });
+    
+    for (const [injectorName, detectStatus] of Object.entries(manualDetectStatuses)) {
+        if (allowedInjectors.includes(injectorName)) {
+            DetectStatus[injectorName] = detectStatus;
+        }
+    }
+    
+    initializeStatuses();
+}
+
+function updateStatusDisplay(injectorName) {
+    const statusContainer = document.getElementById(`status-${injectorName}`);
+    if (!statusContainer) return;
+
+    statusContainer.innerHTML = "";
+
+    const updateStatus = UpdateStatus[injectorName] || "Unknown";
+    const detectStatus = DetectStatus[injectorName] || "Unknown";
+
+    const updateIndicator = createStatusIndicator("update", updateStatus);
+    const detectIndicator = createStatusIndicator("detect", detectStatus);
+
+    statusContainer.appendChild(updateIndicator);
+    statusContainer.appendChild(detectIndicator);
+}
+
+function initializeStatuses() {
+    allowedInjectors.forEach(injectorName => {
+        updateStatusDisplay(injectorName);
+    });
+}
+
+function createStatusIndicator(type, status) {
+    const indicator = document.createElement("div");
+    indicator.className = "status-indicator";
+
+    if (type === "update") {
+        if (status === "Updated" || status === "updated") {
+            indicator.className = "status-indicator status-updated";
+            indicator.textContent = "Updated";
+        } else if (
+            status === "Not Updated" ||
+            status === "not_updated" ||
+            status === "not updated"
+        ) {
+            indicator.className = "status-indicator status-not-updated";
+            indicator.textContent = "Not Updated";
+        } else {
+            indicator.className = "status-indicator status-unknown-update";
+            indicator.textContent = status || "Unknown";
+        }
+    } else {
+        if (status === "Detected" || status === "detected") {
+            indicator.className = "status-indicator status-detected";
+            indicator.textContent = "Detected";
+        } else if (status === "Undetected" || status === "undetected") {
+            indicator.className = "status-indicator status-undetected";
+            indicator.textContent = "Undetected";
+        } else if (status === "Testing" || status === "testing") {
+            indicator.className = "status-indicator status-testing";
+            indicator.textContent = "Testing";
+        } else {
+            indicator.className = "status-indicator status-unknown-update";
+            indicator.textContent = status || "Unknown";
+        }
+    }
+
+    return indicator;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetchStatusesFromAPI();
+    setInterval(fetchStatusesFromAPI, 5 * 60 * 1000);
+
+    resizeCanvas();
+    animateParticles();
+    createFloatingParticles();
+    checkTechnicalIssues();
+    handleScrollAnimations();
+});
 
     const canvas = document.getElementById("animated-bg");
     const ctx = canvas.getContext("2d");
