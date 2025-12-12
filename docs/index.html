@@ -732,11 +732,14 @@
         .executer-card {
             background: rgba(30, 10, 10, 0.3);
             border-radius: 10px;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
             transition: all 0.3s ease;
             border: 1px solid rgba(70, 30, 30, 0.2);
             cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            min-height: 220px;
         }
 
         .executer-card:hover {
@@ -746,7 +749,7 @@
         }
 
         .executer-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 10px;
             transition: all 0.3s ease;
             transform-origin: center;
@@ -769,6 +772,7 @@
             opacity: 0.8;
             margin-bottom: 5px;
             color: #c0c0c0;
+            word-break: break-word;
         }
 
         .executer-website {
@@ -776,6 +780,59 @@
             opacity: 0.7;
             word-break: break-word;
             color: #b0b0b0;
+            margin-bottom: 8px;
+        }
+
+        .status-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .status-updated {
+            background: rgba(40, 167, 69, 0.25);
+            color: #4caf50;
+            border: 1px solid rgba(40, 167, 69, 0.7);
+        }
+
+        .status-not-updated {
+            background: rgba(220, 53, 69, 0.25);
+            color: #ff4d4f;
+            border: 1px solid rgba(220, 53, 69, 0.7);
+        }
+
+        .status-unknown-update {
+            background: rgba(108, 117, 125, 0.25);
+            color: #b8c2cc;
+            border: 1px solid rgba(108, 117, 125, 0.7);
+        }
+
+        .status-detected {
+            background: rgba(255, 193, 7, 0.25);
+            color: #ffd966;
+            border: 1px solid rgba(255, 193, 7, 0.7);
+        }
+
+        .status-undetected {
+            background: rgba(111, 66, 193, 0.25);
+            color: #d0b3ff;
+            border: 1px solid rgba(111, 66, 193, 0.7);
+        }
+
+        .status-testing {
+            background: rgba(0, 123, 255, 0.25);
+            color: #82c4ff;
+            border: 1px solid rgba(0, 123, 255, 0.7);
         }
 
         .modal {
@@ -801,15 +858,17 @@
 
         .modal-content {
             background: linear-gradient(135deg, #1a0a0a 0%, #0f0714 100%);
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 500px;
+            margin: 2% auto;
+            padding: 25px;
+            border-radius: 15px;
+            width: 95%;
+            max-width: 1200px;
+            max-height: 85vh;
+            overflow-y: auto;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             border: 1px solid rgba(70, 30, 30, 0.3);
             position: relative;
-            text-align: center;
+            text-align: left;
             transform: scale(0.8);
             transition: transform 0.3s ease;
         }
@@ -841,26 +900,35 @@
         }
 
         .executer-details {
-            text-align: left;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
             margin: 20px 0;
         }
 
         .detail-row {
+            background: rgba(25, 10, 20, 0.3);
+            border-radius: 10px;
+            padding: 15px;
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-direction: column;
+            gap: 8px;
+            border: 1px solid rgba(70, 30, 60, 0.2);
         }
 
         .detail-label {
             font-weight: bold;
             color: #b38e5d;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .detail-value {
-            text-align: right;
             color: #e0e0e0;
+            font-size: 1rem;
+            word-break: break-word;
         }
 
         .website-link {
@@ -873,6 +941,7 @@
             margin-top: 10px;
             transition: all 0.3s ease;
             border: 1px solid rgba(100, 40, 40, 0.3);
+            font-size: 0.9rem;
         }
 
         .website-link:hover {
@@ -921,58 +990,6 @@
             background: rgba(179, 142, 93, 0.3);
             transform: translateY(-2px);
             box-shadow: 0 4px 15px rgba(179, 142, 93, 0.2);
-        }
-
-        .status-container {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .status-updated {
-            background: rgba(40, 167, 69, 0.25);
-            color: #4caf50;
-            border: 1px solid rgba(40, 167, 69, 0.7);
-        }
-
-        .status-not-updated {
-            background: rgba(220, 53, 69, 0.25);
-            color: #ff4d4f;
-            border: 1px solid rgba(220, 53, 69, 0.7);
-        }
-
-        .status-unknown-update {
-            background: rgba(108, 117, 125, 0.25);
-            color: #b8c2cc;
-            border: 1px solid rgba(108, 117, 125, 0.7);
-        }
-
-        .status-detected {
-            background: rgba(255, 193, 7, 0.25);
-            color: #ffd966;
-            border: 1px solid rgba(255, 193, 7, 0.7);
-        }
-
-        .status-undetected {
-            background: rgba(111, 66, 193, 0.25);
-            color: #d0b3ff;
-            border: 1px solid rgba(111, 66, 193, 0.7);
-        }
-
-        .status-testing {
-            background: rgba(0, 123, 255, 0.25);
-            color: #82c4ff;
-            border: 1px solid rgba(0, 123, 255, 0.7);
         }
 
         .script-modal-buttons {
@@ -1212,7 +1229,7 @@
             color: #8a9eff;
             margin-bottom: 10px;
             display: flex;
-            align-items: center;
+                align-items: center;
             justify-content: center;
             gap: 10px;
         }
@@ -1222,6 +1239,64 @@
             opacity: 0.7;
             margin-top: 10px;
             color: #b0b0b0;
+        }
+        
+        .horizontal-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .full-width-row {
+            grid-column: 1 / -1;
+            background: rgba(179, 142, 93, 0.1);
+            border: 1px solid rgba(179, 142, 93, 0.3);
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card {
+            background: rgba(25, 10, 20, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid rgba(70, 30, 60, 0.2);
+        }
+        
+        .info-card-title {
+            color: #b38e5d;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-card-content {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .feature-tag {
+            background: rgba(179, 142, 93, 0.2);
+            color: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
         }
     </style>
 </head>
@@ -1447,11 +1522,11 @@
             <div class="tab-content" id="executers-tab">
                 <div class="executers-container">
                     <h2 class="service-title">⚙️ Supported Executers</h2>
-                    <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">Click on any executor to get more information</p>
+                    <p style="margin-bottom: 30px; opacity: 0.8; color: #c0c0c0;">Click on any executor to get complete information</p>
                     
                     <div class="api-status-info">
                         <h3>🌐 API Status Information</h3>
-                        <p>Update statuses are loaded automatically from <strong>weao.xyz API</strong> in real-time.</p>
+                        <p>All information is loaded automatically from <strong>weao.xyz API</strong> in real-time.</p>
                         <div class="last-update" id="lastUpdate">Last update: Loading...</div>
                     </div>
                     
@@ -1465,75 +1540,75 @@
                     <div class="platform-content active" id="pc-content">
                         <h3 style="margin-bottom: 20px; color: #b38e5d;">PC Executers</h3>
                         <div class="executers-grid">
-                            <div class="executer-card" onclick="showExecuterInfo('Volcano', '$5.99 Weekly', 'https://volcano.wtf')">
+                            <div class="executer-card" onclick="showExecuterInfo('Volcano')">
                                 <div class="executer-icon">🌋</div>
                                 <div class="executer-name">Volcano</div>
-                                <div class="executer-price">$5.99 Weekly</div>
+                                <div class="executer-price" id="price-Volcano">Loading...</div>
                                 <div class="status-container" id="status-Volcano"></div>
-                                <div class="executer-website">volcano.wtf</div>
+                                <div class="executer-website" id="website-Volcano">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Velocity', 'Free', 'https://getvelocity.lol')">
+                            <div class="executer-card" onclick="showExecuterInfo('Velocity')">
                                 <div class="executer-icon">⚡</div>
                                 <div class="executer-name">Velocity</div>
-                                <div class="executer-price">Free</div>
+                                <div class="executer-price" id="price-Velocity">Loading...</div>
                                 <div class="status-container" id="status-Velocity"></div>
-                                <div class="executer-website">getvelocity.lol</div>
+                                <div class="executer-website" id="website-Velocity">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Wave', 'Paid - $7.49 Weekly', 'https://getwave.gg')">
+                            <div class="executer-card" onclick="showExecuterInfo('Wave')">
                                 <div class="executer-icon">🌊</div>
                                 <div class="executer-name">Wave</div>
-                                <div class="executer-price">Paid - $7.49 Weekly</div>
+                                <div class="executer-price" id="price-Wave">Loading...</div>
                                 <div class="status-container" id="status-Wave"></div>
-                                <div class="executer-website">getwave.gg</div>
+                                <div class="executer-website" id="website-Wave">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Seliware', 'Paid - $3.99 Weekly', 'https://seliware.com')">
+                            <div class="executer-card" onclick="showExecuterInfo('Seliware')">
                                 <div class="executer-icon">🛡️</div>
                                 <div class="executer-name">Seliware</div>
-                                <div class="executer-price">Paid - $3.99 Weekly</div>
+                                <div class="executer-price" id="price-Seliware">Loading...</div>
                                 <div class="status-container" id="status-Seliware"></div>
-                                <div class="executer-website">seliware.com</div>
+                                <div class="executer-website" id="website-Seliware">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Swift', 'Free (Key System)', 'https://getswift.vip')">
+                            <div class="executer-card" onclick="showExecuterInfo('Swift')">
                                 <div class="executer-icon">💨</div>
                                 <div class="executer-name">Swift</div>
-                                <div class="executer-price">Free (Key System)</div>
+                                <div class="executer-price" id="price-Swift">Loading...</div>
                                 <div class="status-container" id="status-Swift"></div>
-                                <div class="executer-website">getswift.vip</div>
+                                <div class="executer-website" id="website-Swift">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Valex', 'Free (Key System)', 'https://valex.io')">
+                            <div class="executer-card" onclick="showExecuterInfo('Valex')">
                                 <div class="executer-icon">🔮</div>
                                 <div class="executer-name">Valex</div>
-                                <div class="executer-price">Free (Key System)</div>
+                                <div class="executer-price" id="price-Valex">Loading...</div>
                                 <div class="status-container" id="status-Valex"></div>
-                                <div class="executer-website">valex.io</div>
+                                <div class="executer-website" id="website-Valex">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Potassium', 'Paid - $22.99 Lifetime', 'https://potassium.pro')">
+                            <div class="executer-card" onclick="showExecuterInfo('Potassium')">
                                 <div class="executer-icon">🥔</div>
                                 <div class="executer-name">Potassium</div>
-                                <div class="executer-price">Paid - $22.99 Lifetime</div>
+                                <div class="executer-price" id="price-Potassium">Loading...</div>
                                 <div class="status-container" id="status-Potassium"></div>
-                                <div class="executer-website">potassium.pro</div>
+                                <div class="executer-website" id="website-Potassium">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Bunni.lol', 'Free (Key System)', 'https://realbunni.com')">
+                            <div class="executer-card" onclick="showExecuterInfo('Bunni.lol')">
                                 <div class="executer-icon">🐰</div>
                                 <div class="executer-name">Bunni.lol</div>
-                                <div class="executer-price">Free (Key System)</div>
+                                <div class="executer-price" id="price-Bunni.lol">Loading...</div>
                                 <div class="status-container" id="status-Bunni.lol"></div>
-                                <div class="executer-website">realbunni.com</div>
+                                <div class="executer-website" id="website-Bunni.lol">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Sirhurt', 'Paid - $2.80 Weekly', 'https://sirhurt.net')">
+                            <div class="executer-card" onclick="showExecuterInfo('Sirhurt')">
                                 <div class="executer-icon">👑</div>
                                 <div class="executer-name">Sirhurt</div>
-                                <div class="executer-price">Paid - $2.80 Weekly</div>
+                                <div class="executer-price" id="price-Sirhurt">Loading...</div>
                                 <div class="status-container" id="status-Sirhurt"></div>
-                                <div class="executer-website">sirhurt.net</div>
+                                <div class="executer-website" id="website-Sirhurt">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('ChocoSploit', 'Paid - $10 Monthly (Private)', 'https://discord.gg/PwyPTUuxfZ')">
+                            <div class="executer-card" onclick="showExecuterInfo('ChocoSploit')">
                                 <div class="executer-icon">🍫</div>
                                 <div class="executer-name">ChocoSploit</div>
-                                <div class="executer-price">Paid - $10 Monthly (Private)</div>
+                                <div class="executer-price" id="price-ChocoSploit">Loading...</div>
                                 <div class="status-container" id="status-ChocoSploit"></div>
-                                <div class="executer-website">discord.gg/PwyPTUuxfZ</div>
+                                <div class="executer-website" id="website-ChocoSploit">Loading...</div>
                             </div>
                         </div>
                     </div>
@@ -1541,26 +1616,26 @@
                     <div class="platform-content" id="mac-content">
                         <h3 style="margin-bottom: 20px; color: #b38e5d;">Mac Executers</h3>
                         <div class="executers-grid">
-                            <div class="executer-card" onclick="showExecuterInfo('Hydrogen', 'Free (Key System)', 'https://hydrogen.lat')">
+                            <div class="executer-card" onclick="showExecuterInfo('Hydrogen')">
                                 <div class="executer-icon">💧</div>
                                 <div class="executer-name">Hydrogen</div>
-                                <div class="executer-price">Free (Key System)</div>
+                                <div class="executer-price" id="price-Hydrogen">Loading...</div>
                                 <div class="status-container" id="status-Hydrogen"></div>
-                                <div class="executer-website">hydrogen.lat</div>
+                                <div class="executer-website" id="website-Hydrogen">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Macsploit', 'Paid - $8 Lifetime', 'https://abyssdigital.xyz')">
+                            <div class="executer-card" onclick="showExecuterInfo('Macsploit')">
                                 <div class="executer-icon">🍎</div>
                                 <div class="executer-name">Macsploit</div>
-                                <div class="executer-price">Paid - $8 Lifetime</div>
+                                <div class="executer-price" id="price-Macsploit">Loading...</div>
                                 <div class="status-container" id="status-Macsploit"></div>
-                                <div class="executer-website">abyssdigital.xyz</div>
+                                <div class="executer-website" id="website-Macsploit">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Cryptic', 'Paid - $6.95 Monthly', 'https://reapstore.mysellauth.com/product/cryptic-mac')">
+                            <div class="executer-card" onclick="showExecuterInfo('Cryptic')">
                                 <div class="executer-icon">🔐</div>
                                 <div class="executer-name">Cryptic</div>
-                                <div class="executer-price">Paid - $6.95 Monthly</div>
+                                <div class="executer-price" id="price-Cryptic">Loading...</div>
                                 <div class="status-container" id="status-Cryptic"></div>
-                                <div class="executer-website">reapstore.mysellauth.com</div>
+                                <div class="executer-website" id="website-Cryptic">Loading...</div>
                             </div>
                         </div>
                     </div>
@@ -1568,26 +1643,26 @@
                     <div class="platform-content" id="android-content">
                         <h3 style="margin-bottom: 20px; color: #b38e5d;">Android Executers</h3>
                         <div class="executers-grid">
-                            <div class="executer-card" onclick="showExecuterInfo('Codex', 'Free', 'https://codex.lol')">
+                            <div class="executer-card" onclick="showExecuterInfo('Codex')">
                                 <div class="executer-icon">📜</div>
                                 <div class="executer-name">Codex</div>
-                                <div class="executer-price">Free</div>
+                                <div class="executer-price" id="price-Codex">Loading...</div>
                                 <div class="status-container" id="status-Codex"></div>
-                                <div class="executer-website">codex.lol</div>
+                                <div class="executer-website" id="website-Codex">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Cryptic-Android', 'Free', 'https://getcryptic.net')">
+                            <div class="executer-card" onclick="showExecuterInfo('Cryptic-Android')">
                                 <div class="executer-icon">🔐</div>
                                 <div class="executer-name">Cryptic</div>
-                                <div class="executer-price">Free</div>
+                                <div class="executer-price" id="price-Cryptic-Android">Loading...</div>
                                 <div class="status-container" id="status-Cryptic-Android"></div>
-                                <div class="executer-website">getcryptic.net</div>
+                                <div class="executer-website" id="website-Cryptic-Android">Loading...</div>
                             </div>
-                            <div class="executer-card" onclick="showExecuterInfo('Delta', 'Free (Key System)', 'https://deltaexploits.gg')">
+                            <div class="executer-card" onclick="showExecuterInfo('Delta')">
                                 <div class="executer-icon">Δ</div>
                                 <div class="executer-name">Delta</div>
-                                <div class="executer-price">Free (Key System)</div>
+                                <div class="executer-price" id="price-Delta">Loading...</div>
                                 <div class="status-container" id="status-Delta"></div>
-                                <div class="executer-website">deltaexploits.gg</div>
+                                <div class="executer-website" id="website-Delta">Loading...</div>
                             </div>
                         </div>
                     </div>
@@ -1595,12 +1670,12 @@
                     <div class="platform-content" id="ios-content">
                         <h3 style="margin-bottom: 20px; color: #b38e5d;">iOS Executers</h3>
                         <div class="executers-grid">
-                            <div class="executer-card" onclick="showExecuterInfo('Delta-iOS', 'Free (Key System)', 'https://deltaexploits.gg')">
+                            <div class="executer-card" onclick="showExecuterInfo('Delta-iOS')">
                                 <div class="executer-icon">Δ</div>
                                 <div class="executer-name">Delta</div>
-                                <div class="executer-price">Free (Key System)</div>
+                                <div class="executer-price" id="price-Delta-iOS">Loading...</div>
                                 <div class="status-container" id="status-Delta-iOS"></div>
-                                <div class="executer-website">deltaexploits.gg</div>
+                                <div class="executer-website" id="website-Delta-iOS">Loading...</div>
                             </div>
                         </div>
                     </div>
@@ -1711,7 +1786,7 @@
         <div id="executerModal" class="modal">
             <div class="modal-content">
                 <span class="close-button" onclick="closeExecuterModal()">&times;</span>
-                <h2 class="modal-title" id="executerModalTitle">Executer Info</h2>
+                <h2 class="modal-title" id="executerModalTitle">Complete Information</h2>
                 <div id="executerModalContent">
                 </div>
             </div>
@@ -1759,13 +1834,13 @@
 
     <script>
     const allowedInjectors = [
-    "Volcano", "Velocity", "Wave", "Seliware", "Swift", "Valex",
-    "Potassium", "Bunni.lol", "Sirhurt", "Hydrogen", "Macsploit",
-    "Codex", "Cryptic", "Cryptic-Android", "Delta", "Delta-iOS",
-    "ChocoSploit"
-];
+        "Volcano", "Velocity", "Wave", "Seliware", "Swift", "Valex",
+        "Potassium", "Bunni.lol", "Sirhurt", "Hydrogen", "Macsploit",
+        "Codex", "Cryptic", "Cryptic-Android", "Delta", "Delta-iOS",
+        "ChocoSploit"
+    ];
 
-const manualDetectStatuses = {
+    const manualDetectStatuses = {
         "Volcano": "Undetected",
         "Velocity": "Undetected",
         "Wave": "Undetected",
@@ -1785,187 +1860,215 @@ const manualDetectStatuses = {
         "ChocoSploit": "Undetected"
     };
 
-const API_URL = "https://weao-proxy-api.vercel.app/api/status/exploits";
+    const API_URL = "https://weao-proxy-api.vercel.app/api/status/exploits";
 
-let UpdateStatus = {};
-let DetectStatus = {};
+    let UpdateStatus = {};
+    let DetectStatus = {};
+    let exploitsFullData = {};
 
-async function fetchStatusesFromAPI() {
-    try {
-        const response = await fetch(API_URL, {
-            method: "GET",
-            mode: "cors",
-            headers: {
-                Accept: "application/json"
+    async function fetchStatusesFromAPI() {
+        try {
+            const response = await fetch(API_URL, {
+                method: "GET",
+                mode: "cors",
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            processAPIStatuses(data);
+
+            const lastUpdateElement = document.getElementById("lastUpdate");
+            const now = new Date();
+            lastUpdateElement.textContent = `Last update: ${now.toLocaleTimeString()}`;
+            lastUpdateElement.style.color = "";
+        } catch (error) {
+            console.error("Error loading statuses:", error);
+            setDefaultStatuses();
+            const lastUpdateElement = document.getElementById("lastUpdate");
+            lastUpdateElement.textContent = `Last update: Failed to load - ${new Date().toLocaleTimeString()}`;
+            lastUpdateElement.style.color = "#ff6b7a";
+        }
+    }
+
+    function processAPIStatuses(apiData) {
+        UpdateStatus = {};
+        DetectStatus = {};
+        exploitsFullData = {};
+
+        const handleItem = (item) => {
+            if (!item || !item.title) return;
+
+            let injectorName = item.name || item.injector || item.title;
+
+            if (injectorName === "Delta") {
+                if (item.platform === "iOS") {
+                    injectorName = "Delta-iOS";
+                } else if (item.platform === "Android") {
+                    injectorName = "Delta";
+                }
+            }
+
+            if (injectorName === "Cryptic" && item.platform === "Android") {
+                injectorName = "Cryptic-Android";
+            }
+
+            if (!allowedInjectors.includes(injectorName)) return;
+
+            exploitsFullData[injectorName] = item;
+
+            const updateRaw = item.updateStatus;
+
+            if (typeof updateRaw === "boolean") {
+                UpdateStatus[injectorName] = updateRaw ? "Updated" : "Not Updated";
+            } else if (typeof item.status === "string") {
+                UpdateStatus[injectorName] = item.status;
+            } else {
+                UpdateStatus[injectorName] = "Unknown";
+            }
+
+            DetectStatus[injectorName] = manualDetectStatuses[injectorName] || "Unknown";
+            
+            updateInjectorCard(injectorName);
+        };
+
+        if (Array.isArray(apiData)) {
+            apiData.forEach(handleItem);
+        } else if (apiData && typeof apiData === "object") {
+            Object.values(apiData).forEach(handleItem);
+        }
+
+        allowedInjectors.forEach((injectorName) => {
+            if (!UpdateStatus[injectorName]) {
+                UpdateStatus[injectorName] = "Unknown";
+            }
+            if (!DetectStatus[injectorName]) {
+                DetectStatus[injectorName] = manualDetectStatuses[injectorName] || "Unknown";
+            }
+            if (!exploitsFullData[injectorName]) {
+                updateInjectorCard(injectorName);
             }
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        processAPIStatuses(data);
-
-        const lastUpdateElement = document.getElementById("lastUpdate");
-        const now = new Date();
-        lastUpdateElement.textContent = `Last update: ${now.toLocaleTimeString()}`;
-        lastUpdateElement.style.color = "";
-    } catch (error) {
-        console.error("Error loading statuses:", error);
-        setDefaultStatuses();
-        const lastUpdateElement = document.getElementById("lastUpdate");
-        lastUpdateElement.textContent = `Last update: Failed to load - ${new Date().toLocaleTimeString()}`;
-        lastUpdateElement.style.color = "#ff6b7a";
+        initializeStatuses();
     }
-}
 
-function processAPIStatuses(apiData) {
-    UpdateStatus = {};
-    DetectStatus = {};
+    function updateInjectorCard(injectorName) {
+        const injectorData = exploitsFullData[injectorName];
+        
+        const priceElement = document.getElementById(`price-${injectorName}`);
+        const websiteElement = document.getElementById(`website-${injectorName}`);
+        
+        if (priceElement) {
+            if (injectorData && injectorData.cost) {
+                if (injectorData.free === true) {
+                    priceElement.textContent = '';
+                } else {
+                    priceElement.textContent = injectorData.cost;
+                }
+            } else if (injectorData && injectorData.free !== undefined) {
+                priceElement.textContent = injectorData.free ? '' : 'Paid';
+            } else {
+                priceElement.textContent = "Price not available";
+            }
+        }
+        
+        if (websiteElement) {
+            if (injectorData && injectorData.websitelink) {
+                websiteElement.textContent = injectorData.websitelink.replace("https://", "");
+            } else {
+                websiteElement.textContent = "Website not available";
+            }
+        }
+        
+        updateStatusDisplay(injectorName);
+    }
 
-    const handleItem = (item) => {
-        if (!item || !item.title) return;
+    function setDefaultStatuses() {
+        allowedInjectors.forEach(injectorName => {
+            UpdateStatus[injectorName] = "Unknown";
+            DetectStatus[injectorName] = manualDetectStatuses[injectorName] || "Unknown";
+            updateInjectorCard(injectorName);
+        });
+        
+        initializeStatuses();
+    }
 
-        let injectorName = item.name || item.injector || item.title;
+    function updateStatusDisplay(injectorName) {
+        const statusContainer = document.getElementById(`status-${injectorName}`);
+        if (!statusContainer) return;
 
-        if (injectorName === "Delta") {
-            if (item.platform === "iOS") {
-                injectorName = "Delta-iOS";
-            } else if (item.platform === "Android") {
-                injectorName = "Delta";
+        statusContainer.innerHTML = "";
+
+        const updateStatus = UpdateStatus[injectorName] || "Unknown";
+        const detectStatus = DetectStatus[injectorName] || "Unknown";
+
+        const updateIndicator = createStatusIndicator("update", updateStatus);
+        const detectIndicator = createStatusIndicator("detect", detectStatus);
+
+        statusContainer.appendChild(updateIndicator);
+        statusContainer.appendChild(detectIndicator);
+    }
+
+    function initializeStatuses() {
+        allowedInjectors.forEach(injectorName => {
+            updateStatusDisplay(injectorName);
+        });
+    }
+
+    function createStatusIndicator(type, status) {
+        const indicator = document.createElement("div");
+        indicator.className = "status-indicator";
+
+        if (type === "update") {
+            if (status === "Updated" || status === "updated") {
+                indicator.className = "status-indicator status-updated";
+                indicator.textContent = "Updated";
+            } else if (
+                status === "Not Updated" ||
+                status === "not_updated" ||
+                status === "not updated"
+            ) {
+                indicator.className = "status-indicator status-not-updated";
+                indicator.textContent = "Not Updated";
+            } else {
+                indicator.className = "status-indicator status-unknown-update";
+                indicator.textContent = status || "Unknown";
+            }
+        } else {
+            if (status === "Detected" || status === "detected") {
+                indicator.className = "status-indicator status-detected";
+                indicator.textContent = "Detected";
+            } else if (status === "Undetected" || status === "undetected") {
+                indicator.className = "status-indicator status-undetected";
+                indicator.textContent = "Undetected";
+            } else if (status === "Testing" || status === "testing") {
+                indicator.className = "status-indicator status-testing";
+                indicator.textContent = "Testing";
+            } else {
+                indicator.className = "status-indicator status-unknown-update";
+                indicator.textContent = status || "Unknown";
             }
         }
 
-        if (injectorName === "Cryptic" && item.platform === "Android") {
-            injectorName = "Cryptic-Android";
-        }
-
-        if (!allowedInjectors.includes(injectorName)) return;
-
-        const updateRaw = item.updateStatus;
-        const detectRaw = item.detected;
-
-        if (typeof updateRaw === "boolean") {
-            UpdateStatus[injectorName] = updateRaw ? "Updated" : "Not Updated";
-        } else if (typeof item.status === "string") {
-            UpdateStatus[injectorName] = item.status;
-        } else {
-            UpdateStatus[injectorName] = "Unknown";
-        }
-
-        DetectStatus[injectorName] = "Unknown";
-    };
-
-    if (Array.isArray(apiData)) {
-        apiData.forEach(handleItem);
-    } else if (apiData && typeof apiData === "object") {
-        Object.values(apiData).forEach(handleItem);
+        return indicator;
     }
 
-    allowedInjectors.forEach((injectorName) => {
-        if (!UpdateStatus[injectorName]) {
-            UpdateStatus[injectorName] = "Unknown";
-        }
-        if (!DetectStatus[injectorName]) {
-            DetectStatus[injectorName] = "Unknown";
-        }
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchStatusesFromAPI();
+        setInterval(fetchStatusesFromAPI, 5 * 60 * 1000);
+
+        resizeCanvas();
+        animateParticles();
+        createFloatingParticles();
+        checkTechnicalIssues();
+        handleScrollAnimations();
     });
-
-    for (const [injectorName, detectStatus] of Object.entries(manualDetectStatuses)) {
-        if (allowedInjectors.includes(injectorName)) {
-            DetectStatus[injectorName] = detectStatus;
-        }
-    }
-
-    initializeStatuses();
-}
-
-function setDefaultStatuses() {
-    allowedInjectors.forEach(injectorName => {
-        UpdateStatus[injectorName] = "Unknown";
-        DetectStatus[injectorName] = "Unknown";
-    });
-    
-    for (const [injectorName, detectStatus] of Object.entries(manualDetectStatuses)) {
-        if (allowedInjectors.includes(injectorName)) {
-            DetectStatus[injectorName] = detectStatus;
-        }
-    }
-    
-    initializeStatuses();
-}
-
-function updateStatusDisplay(injectorName) {
-    const statusContainer = document.getElementById(`status-${injectorName}`);
-    if (!statusContainer) return;
-
-    statusContainer.innerHTML = "";
-
-    const updateStatus = UpdateStatus[injectorName] || "Unknown";
-    const detectStatus = DetectStatus[injectorName] || "Unknown";
-
-    const updateIndicator = createStatusIndicator("update", updateStatus);
-    const detectIndicator = createStatusIndicator("detect", detectStatus);
-
-    statusContainer.appendChild(updateIndicator);
-    statusContainer.appendChild(detectIndicator);
-}
-
-function initializeStatuses() {
-    allowedInjectors.forEach(injectorName => {
-        updateStatusDisplay(injectorName);
-    });
-}
-
-function createStatusIndicator(type, status) {
-    const indicator = document.createElement("div");
-    indicator.className = "status-indicator";
-
-    if (type === "update") {
-        if (status === "Updated" || status === "updated") {
-            indicator.className = "status-indicator status-updated";
-            indicator.textContent = "Updated";
-        } else if (
-            status === "Not Updated" ||
-            status === "not_updated" ||
-            status === "not updated"
-        ) {
-            indicator.className = "status-indicator status-not-updated";
-            indicator.textContent = "Not Updated";
-        } else {
-            indicator.className = "status-indicator status-unknown-update";
-            indicator.textContent = status || "Unknown";
-        }
-    } else {
-        if (status === "Detected" || status === "detected") {
-            indicator.className = "status-indicator status-detected";
-            indicator.textContent = "Detected";
-        } else if (status === "Undetected" || status === "undetected") {
-            indicator.className = "status-indicator status-undetected";
-            indicator.textContent = "Undetected";
-        } else if (status === "Testing" || status === "testing") {
-            indicator.className = "status-indicator status-testing";
-            indicator.textContent = "Testing";
-        } else {
-            indicator.className = "status-indicator status-unknown-update";
-            indicator.textContent = status || "Unknown";
-        }
-    }
-
-    return indicator;
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    fetchStatusesFromAPI();
-    setInterval(fetchStatusesFromAPI, 5 * 60 * 1000);
-
-    resizeCanvas();
-    animateParticles();
-    createFloatingParticles();
-    checkTechnicalIssues();
-    handleScrollAnimations();
-});
 
     const canvas = document.getElementById("animated-bg");
     const ctx = canvas.getContext("2d");
@@ -2026,7 +2129,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 y: Math.random() * canvas.height,
                 size: Math.random() * 3 + 1,
                 speedX: Math.random() * 1 - 0.5,
-                speedY: Math.random() * 1 - 0.5,
+                speedY = Math.random() * 1 - 0.5,
                 color: `rgba(${
                     Math.random() > 0.5 ? "179, 142, 93" : "168, 107, 107"
                 }, ${Math.random() * 0.3 + 0.2})`
@@ -2304,54 +2407,190 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    function showExecuterInfo(executerName, price, website) {
+    function showExecuterInfo(executerName) {
         const modal = document.getElementById("executerModal");
         const modalTitle = document.getElementById("executerModalTitle");
         const modalContent = document.getElementById("executerModalContent");
 
-        modalTitle.textContent = `${executerName} Info`;
+        modalTitle.textContent = `${executerName} - Complete Information`;
 
+        const injectorData = exploitsFullData[executerName];
         const updateStatus = UpdateStatus[executerName] || "Unknown";
         const detectStatus = DetectStatus[executerName] || "Unknown";
 
-        modalContent.innerHTML = `
-                <div class="executer-details">
-                    <div class="detail-row">
-                        <span class="detail-label">Price:</span>
-                        <span class="detail-value">${price}</span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Update Status:</span>
-                        <span class="detail-value">
-                            ${createStatusIndicator("update", updateStatus).outerHTML}
-                        </span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Detect Status:</span>
-                        <span class="detail-value">
-                            ${createStatusIndicator("detect", detectStatus).outerHTML}
-                        </span>
-                    </div>
-                    <div class="detail-row">
-                        <span class="detail-label">Website:</span>
-                        <span class="detail-value">${website.replace("https://", "")}</span>
+        if (!injectorData) {
+            modalContent.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">❌</div>
+                    <h3 style="color: #a86b6b; margin-bottom: 15px;">Data Not Available</h3>
+                    <p style="color: #c0c0c0; margin-bottom: 20px;">No API data available for ${executerName}.</p>
+                    <p style="color: #b0b0b0; font-size: 0.9rem;">Last update: ${new Date().toLocaleTimeString()}</p>
+                </div>`;
+            
+            modal.style.display = "flex";
+            setTimeout(() => {
+                modal.classList.add("active");
+            }, 10);
+            return;
+        }
+
+        let modalHTML = `
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-card-title">📋 Basic Information</div>
+                    <div class="info-card-content">
+                        <div class="detail-row">
+                            <div class="detail-label">Name:</div>
+                            <div class="detail-value">${executerName}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Version:</div>
+                            <div class="detail-value">${injectorData.version || "Not available"}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Updated Date:</div>
+                            <div class="detail-value">${injectorData.updatedDate || "Not available"}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Roblox Version:</div>
+                            <div class="detail-value">${injectorData.rbxversion || "Not available"}</div>
+                        </div>
                     </div>
                 </div>
-                
-                <a href="${website}" class="website-link" target="_blank">Official Website</a>
-                
-                <div style="margin-top: 20px; padding: 15px; background: rgba(179, 142, 93, 0.1); border-radius: 10px; border: 1px solid rgba(179, 142, 93, 0.2);">
-                    <h3 style="color: #b38e5d; margin-bottom: 10px; font-size: 1rem;">🌐 API Information</h3>
+
+                <div class="info-card">
+                    <div class="info-card-title">💰 Pricing & Platform</div>
+                    <div class="info-card-content">
+                        <div class="detail-row">
+                            <div class="detail-label">Free:</div>
+                            <div class="detail-value">${injectorData.free !== undefined ? (injectorData.free ? 'Yes' : 'No') : "Not available"}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Price:</div>
+                            <div class="detail-value">
+                                ${injectorData.free === true ? 'Free' : (injectorData.cost || "Not available")}
+                            </div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Platform:</div>
+                            <div class="detail-value">${injectorData.platform || "Not available"}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Type:</div>
+                            <div class="detail-value">${getExecutorType(injectorData.extype) || "Not available"}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card full-width-row">
+                    <div class="info-card-title">📊 Status Information</div>
+                    <div class="info-card-content">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                            <div class="detail-row">
+                                <div class="detail-label">Update Status:</div>
+                                <div class="detail-value">${createStatusIndicator("update", updateStatus).outerHTML}</div>
+                            </div>
+                            ${detectStatus !== "Unknown" ? `
+                            <div class="detail-row">
+                                <div class="detail-label">Detection Status:</div>
+                                <div class="detail-value">${createStatusIndicator("detect", detectStatus).outerHTML}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-title">⚡ Performance</div>
+                    <div class="info-card-content">
+                        <div class="detail-row">
+                            <div class="detail-label">UNC Percentage:</div>
+                            <div class="detail-value">${injectorData.uncPercentage !== undefined ? injectorData.uncPercentage + '%' : "Not available"}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">sUNC Percentage:</div>
+                            <div class="detail-value">${injectorData.suncPercentage !== undefined ? injectorData.suncPercentage + '%' : "Not available"}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Beta:</div>
+                            <div class="detail-value">${injectorData.beta !== undefined ? (injectorData.beta ? 'Yes' : 'No') : "Not available"}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Key System:</div>
+                            <div class="detail-value">
+                                ${injectorData.free === false ? 'Paid' : (injectorData.keysystem !== undefined ? (injectorData.keysystem ? 'Yes' : 'No') : "Not available")}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-title">✨ Features</div>
+                    <div class="info-card-content">
+                        <div class="features-list">
+                            ${injectorData.decompiler ? '<span class="feature-tag">Decompiler</span>' : ''}
+                            ${injectorData.multiInject ? '<span class="feature-tag">Multi-Inject</span>' : ''}
+                            ${injectorData.unlinked ? '<span class="feature-tag">Unlinked</span>' : ''}
+                            ${injectorData.recommended ? '<span class="feature-tag">Recommended</span>' : ''}
+                            ${(!injectorData.decompiler && !injectorData.multiInject && !injectorData.unlinked && !injectorData.recommended) ? 
+                               '<span class="feature-tag">No special features</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card full-width-row" style="margin-top: 20px;">
+                <div class="info-card-title">🔗 Links</div>
+                <div class="info-card-content">
+                    <div class="horizontal-links">
+                        ${injectorData.websitelink ? `<a href="${injectorData.websitelink}" class="website-link" target="_blank">🌐 Official Website</a>` : ''}
+                        ${injectorData.discordlink ? `<a href="${injectorData.discordlink}" class="website-link" target="_blank">💬 Discord</a>` : ''}
+                        ${injectorData.purchaselink ? `<a href="${injectorData.purchaselink}" class="website-link" target="_blank">🛒 Purchase</a>` : ''}
+                        ${(!injectorData.websitelink && !injectorData.discordlink && !injectorData.purchaselink) ? 
+                          '<span style="color: #b0b0b0;">No links available</span>' : ''}
+                    </div>
+                </div>
+            </div>
+
+            ${injectorData.slug && injectorData.slug.fullDescription ? `
+            <div class="info-card full-width-row" style="margin-top: 20px;">
+                <div class="info-card-title">📝 Description</div>
+                <div class="info-card-content">
+                    <p style="line-height: 1.6; color: #e0e0e0;">${injectorData.slug.fullDescription}</p>
+                </div>
+            </div>
+            ` : ''}
+
+            <div class="info-card full-width-row" style="margin-top: 20px; background: rgba(179, 142, 93, 0.1); border: 1px solid rgba(179, 142, 93, 0.3);">
+                <div class="info-card-title">🌐 API Information</div>
+                <div class="info-card-content">
                     <p style="font-size: 0.9rem; opacity: 0.8; color: #c0c0c0;">
-                        Update status loaded from weao.xyz API in real-time.
+                        All data is loaded from weao.xyz API in real-time. Detect status fields are excluded.
+                    </p>
+                    <p style="font-size: 0.8rem; opacity: 0.7; color: #b0b0b0; margin-top: 10px;">
+                        Last API update: ${new Date().toLocaleTimeString()}
                     </p>
                 </div>
-            `;
+            </div>`;
+
+        modalContent.innerHTML = modalHTML;
 
         modal.style.display = "flex";
         setTimeout(() => {
             modal.classList.add("active");
         }, 10);
+    }
+
+    function getExecutorType(extype) {
+        const typeMap = {
+            'wexecutor': 'Internal',
+            'wexternal': 'External', 
+            'aexecutor': 'Android',
+            'mexecutor': 'Mac',
+            'iexecutor': 'iOS',
+            'hidden': 'Hidden'
+        };
+        return typeMap[extype] || extype;
     }
 
     function closeExecuterModal() {
@@ -2385,6 +2624,6 @@ document.addEventListener("DOMContentLoaded", function () {
             closeNightsModal();
         }
     };
-</script>
+    </script>
 </body>
 </html>
